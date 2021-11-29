@@ -2,7 +2,6 @@ import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom'
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store'
-import EditToolbar from './EditToolbar'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,9 +10,23 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { createTheme, ThemeProvider} from '@mui/material';
+
 
 export default function AppBanner() {
+
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main:'#e0e0e0'
+            },
+            secondary: {
+                main: '#000000'
+            }
+        }
+    })
+
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -37,7 +50,7 @@ export default function AppBanner() {
         <Menu
             anchorEl={anchorEl}
             anchorOrigin={{
-                vertical: 'top',
+                vertical: 'bottom',
                 horizontal: 'right',
             }}
             id={menuId}
@@ -57,7 +70,7 @@ export default function AppBanner() {
         <Menu
             anchorEl={anchorEl}
             anchorOrigin={{
-                vertical: 'top',
+                vertical: 'bottom',
                 horizontal: 'right',
             }}
             id={menuId}
@@ -76,15 +89,29 @@ export default function AppBanner() {
     let menu = loggedOutMenu;
     if (auth.loggedIn) {
         menu = loggedInMenu;
-        if (store.currentList) {
-            editToolbar = <EditToolbar />;
-        }
     }
     
     function getAccountMenu(loggedIn) {
         if (!loggedIn) {
             return (
-            <IconButton
+                <ThemeProvider theme={theme}>
+                <IconButton
+                    size="large"
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-controls={menuId}
+                    aria-haspopup="true"
+                    onClick={handleProfileMenuOpen}
+                    color="primary"
+                >
+                    <AccountCircleOutlinedIcon color="secondary" fontSize="large" />
+                </IconButton>
+                </ThemeProvider>
+            )
+        } else {
+            let initialsText = auth.user.firstName.charAt(0)+auth.user.lastName.charAt(0)
+            return (
+                <Button
                 size="large"
                 edge="end"
                 aria-label="account of current user"
@@ -93,35 +120,40 @@ export default function AppBanner() {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
             >
-                <AccountCircle />
-            </IconButton>
-            )
-        } else {
-            let initialsText = auth.user.firstName.charAt(0)+auth.user.lastName.charAt(0)
-            return (
-                <Button
-                    size="large"
-                    edge="end"
-                    aria-label="account of current user"
-                    aria-controls={menuId}
-                    aria-haspopup="true"
-                    onClick={handleProfileMenuOpen}
-                    color="inherit"
-                >
+                <Box sx={{ m:1, border:2, width: '1.8rem', height: '1.8rem', borderRadius: "50%", color:'black', bgcolor:"#D236DF"}}>
                     {initialsText}
+                </Box>
 
-                </Button>
-
+            </Button>
             )
-
         }
-        
+    }
+
+    function defaulting() {
+        let initialsText = "SY"
+        return (
+            <Button
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+            >
+                <Box sx={{ m:1, border:2, width: '1.8rem', height: '1.8rem', borderRadius: "50%", color:'black', bgcolor:"#D236DF"}}>
+                    {initialsText}
+                </Box>
+
+            </Button>
+        )
     }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" style={{ background: '#2E3B55' }}>
-                <Toolbar>
+            <AppBar position="static" style={{ background: '#e0e0e0' }} height="100">
+                <Toolbar variant="dense">
+
                     <Typography                        
                         variant="h4"
                         noWrap
@@ -130,10 +162,12 @@ export default function AppBanner() {
                     >
                         <Link style={{ textDecoration: 'none', color: "#d4af37" }} to='/'>T<sup>5</sup>L</Link>
                     </Typography>
+
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                            { getAccountMenu(auth.loggedIn) }
+                            { getAccountMenu(auth.loggedIn) /*defaulting()*/ }
                     </Box>
+
                 </Toolbar>
             </AppBar>
             {
