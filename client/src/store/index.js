@@ -1,9 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import jsTPS from '../common/jsTPS'
 import api from '../api'
-import MoveItem_Transaction from '../transactions/MoveItem_Transaction'
-import UpdateItem_Transaction from '../transactions/UpdateItem_Transaction'
 import AuthContext from '../auth'
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -30,7 +27,6 @@ export const GlobalStoreActionType = {
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
-const tps = new jsTPS();
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
@@ -208,8 +204,6 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
             payload: {}
         });
-        
-        tps.clearAllTransactions();
         history.push("/");
     }
 
@@ -223,7 +217,6 @@ function GlobalStoreContextProvider(props) {
         };
         const response = await api.createTop5List(payload);
         if (response.data.success) {
-            tps.clearAllTransactions();
             let newList = response.data.top5List;
             storeReducer({
                 type: GlobalStoreActionType.CREATE_NEW_LIST,
@@ -323,24 +316,6 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    store.addMoveItemTransaction = function (start, end) {
-        //("MOVE ITEM INDICES: ", start, end)
-        if (start != end) {
-            let transaction = new MoveItem_Transaction(store, start, end);
-            tps.addTransaction(transaction);
-        }
-    }
-
-    store.addUpdateItemTransaction = function (index, newText) {
-        let oldText = store.currentList.items[index];
-        //console.log("old text: ", oldText)
-        //console.log("New Text: ", newText)
-        if (oldText !== newText) {
-            let transaction = new UpdateItem_Transaction(store, index, oldText, newText);
-            tps.addTransaction(transaction);
-        }
-    }
-
     store.moveItem = function (start, end) {
         start -= 1;
         end -= 1;
@@ -378,23 +353,6 @@ function GlobalStoreContextProvider(props) {
                 payload: store.currentList
             });
         }
-    }
-    
-
-    store.undo = function () {
-        tps.undoTransaction();
-    }
-
-    store.redo = function () {
-        tps.doTransaction();
-    }
-
-    store.canUndo = function() {
-        return tps.hasTransactionToUndo();
-    }
-
-    store.canRedo = function() {
-        return tps.hasTransactionToRedo();
     }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME

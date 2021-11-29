@@ -6,8 +6,8 @@
     
         @author McKilla Gorilla
     */
-  --swatch-foundation: #eeeedd;
-  --swatch-primary: #e6e6e6;
+  --swatch-foundation: #FFFEC1;
+  --swatch-primary: #C4C4C4;
   --swatch-complement: #e1e4cb;
   --swatch-contrast: #111111;
   --swatch-accent: #669966;
@@ -70,7 +70,7 @@ body {
 }
 
 #edit-toolbar {
-  background-color: transparent;
+  background-color: "transparent";
   float: right;
 }
 
