@@ -1,14 +1,15 @@
 import './App.css';
-import { React } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { React } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { AuthContextProvider } from './auth';
-import { GlobalStoreContextProvider } from './store'
+import { GlobalStoreContextProvider } from './store';
+import theme from './theme';
+import { ThemeProvider} from '@mui/material';
 import {
     AppBanner,
     HomeWrapper,
     LoginScreen,
     RegisterScreen,
-    Statusbar,
     WorkspaceScreen,
 } from './components'
 /*
@@ -23,8 +24,10 @@ import {
   @author McKilla Gorilla
 */
 
+
 const App = () => {
     return (
+        <ThemeProvider theme={theme}>
         <BrowserRouter>
             <AuthContextProvider>
                 <GlobalStoreContextProvider>              
@@ -35,10 +38,16 @@ const App = () => {
                         <Route path="/register/" exact component={RegisterScreen} />
                         <Route path="/top5list/:id" exact component={WorkspaceScreen} />
                     </Switch>
-                    <Statusbar />
+                    
                 </GlobalStoreContextProvider>
             </AuthContextProvider>
         </BrowserRouter>
+        </ThemeProvider>
     )
 }
 export default App
+/*
+    Switch
+    StatusBar
+GlobalStoreContextProvider
+*/

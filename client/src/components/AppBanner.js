@@ -11,21 +11,11 @@ import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import { createTheme, ThemeProvider} from '@mui/material';
+import { ThemeProvider } from '@emotion/react';
+import theme from '../theme';
 
 
 export default function AppBanner() {
-
-    const theme = createTheme({
-        palette: {
-            primary: {
-                main:'#e0e0e0'
-            },
-            secondary: {
-                main: '#000000'
-            }
-        }
-    })
 
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
@@ -92,24 +82,33 @@ export default function AppBanner() {
     }
     
     function getAccountMenu(loggedIn) {
-        if (!loggedIn) {
+        if (true) {
             return (
                 <ThemeProvider theme={theme}>
-                <IconButton
+
+                <Button
                     size="large"
                     edge="end"
                     aria-label="account of current user"
                     aria-controls={menuId}
                     aria-haspopup="true"
                     onClick={handleProfileMenuOpen}
-                    color="primary"
                 >
-                    <AccountCircleOutlinedIcon color="secondary" fontSize="large" />
-                </IconButton>
+                    <Box sx={{ m:2 }}>
+                        <Box sx={{ m:1, width: '2.3rem', height: '2.5rem',}}>
+                            <AccountCircleOutlinedIcon style= {{fontSize:40}} color="primary"/>
+                        </Box>
+                    </Box>
+                </Button>
+
                 </ThemeProvider>
             )
         } else {
-            let initialsText = auth.user.firstName.charAt(0)+auth.user.lastName.charAt(0)
+            //let initialsText = auth.user.firstName.charAt(0)+auth.user.lastName.charAt(0)
+
+            //<Box sx={{ m:1, border:2, width: '1.8rem', height: '1.8rem', borderRadius: "50%", color:'black', bgcolor:"#D236DF"}}>
+
+            let initialsText = "SY"
             return (
                 <Button
                 size="large"
@@ -118,35 +117,18 @@ export default function AppBanner() {
                 aria-controls={menuId}
                 aria-haspopup="true"
                 onClick={handleProfileMenuOpen}
-                color="inherit"
             >
-                <Box sx={{ m:1, border:2, width: '1.8rem', height: '1.8rem', borderRadius: "50%", color:'black', bgcolor:"#D236DF"}}>
-                    {initialsText}
+                <Box sx={{ m:2 }}>
+                    <Box sx={{ m:1, border:2, width: '1.7rem', height: '1.7rem', borderRadius: "50%", color:'black', bgcolor:"#D236DF"}}>
+                        <Typography>
+                            {initialsText}
+                        </Typography>
+                    </Box>
                 </Box>
 
             </Button>
             )
         }
-    }
-
-    function defaulting() {
-        let initialsText = "SY"
-        return (
-            <Button
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-            >
-                <Box sx={{ m:1, border:2, width: '1.8rem', height: '1.8rem', borderRadius: "50%", color:'black', bgcolor:"#D236DF"}}>
-                    {initialsText}
-                </Box>
-
-            </Button>
-        )
     }
 
     return (
@@ -163,9 +145,12 @@ export default function AppBanner() {
                         <Link style={{ textDecoration: 'none', color: "#d4af37" }} to='/'>T<sup>5</sup>L</Link>
                     </Typography>
 
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                            { getAccountMenu(auth.loggedIn) /*defaulting()*/ }
+                    <Box sx={{ flexGrow: 1 }}>
+
+                    </Box>
+
+                    <Box sx={{ display: { xs: 'none', md: 'flex' }, height:40}}>
+                            { getAccountMenu(auth.loggedIn) }
                     </Box>
 
                 </Toolbar>

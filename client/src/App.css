@@ -16,10 +16,12 @@
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
 }
 
+/*The main background yellow color*/
 body {
   background-color: var(--swatch-foundation);
 }
 
+/*body right under appBanner*/
 #root {
   background-color: var(--swatch-primary);
   font-family: "Lexend Exa";
