@@ -3,41 +3,57 @@ import { Typography } from '@mui/material';
 import theme from '../theme';
 import { ThemeProvider} from '@mui/material';
 import { Button } from '@mui/material';
+import Copyright from './Copyright';
 
 export default function SplashScreen() {
     return (
         <ThemeProvider theme={theme}>
 
-        <Box
-            sx={{
-                width: "100%",
-                height: "93%",
-                background: 'linear-gradient(to top, #1c2f69, #8c93ca)'
-            }}
-        >
-            <Box pt={6}></Box>
+        <Box sx={{ width: "100%", 
+                    height: "94.4%", 
+                    background: 'linear-gradient(to top, #1c2f69, #8c93ca)'
+                }}>
 
-            <Typography align="center" variant="h2" color="common.white">
+            <Box pt={15}></Box>
+
+            <Typography align="center" variant="h3" color="common.white">
                 Welcome to
             </Typography>
 
             <Typography align="center" variant="h1" color="biglettering">
                 Top 5 Lister
             </Typography>
+            
+            <Box pt={8}></Box>
 
-            <Button variant="contained" color="secondary" align="center">
-                Register
-            </Button>
+            <Box>
+                <Button variant="contained" color="secondary" sx={{height: 75, width: 200, mx: 64}} href="/register">
+                    Register
+                </Button>
+                <Button variant="contained" color="secondary" sx={{height: 75, width: 200, mx: -50}} href="/login">
+                    Login
+                </Button>
+            </Box>
 
-            <Button variant="contained" color="secondary" align="center">
-                Login
-            </Button>
+            <Box pt={6}></Box>
 
-            <Button variant="contained" color="secondary" align="center">
-                Continue as Guest
-            </Button>
+            <Box>
+            <Button variant="contained" color="secondary" sx={{height: 38, width: 181, mx: 84.5}}>
+                    Continue as Guest
+                </Button>
+            </Box>
+                
+            <Box>
+            <Copyright sx={{height: 38, width: 181, mt:"15%", ml:"2%"}}/>
+            </Box>
+
         </Box>
 
         </ThemeProvider>
     )
 }
+
+/*
+<MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
+            <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
+            */
