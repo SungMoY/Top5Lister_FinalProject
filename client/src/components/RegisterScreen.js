@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import AuthContext from '../auth'
-import Copyright from './Copyright'
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,6 +12,11 @@ import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { GlobalStoreContext } from '../store'
 import RegisterModal from './RegisterModal';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Copyright from './Copyright'
+
+
+const theme = createTheme();
 
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
@@ -33,6 +37,7 @@ export default function RegisterScreen() {
 
     //console.log("IN REGISTER SCREEN COMPONENT, AUTH IS:", auth.registerErrorCode)
     return (
+        <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <RegisterModal />
                 <CssBaseline />
@@ -123,7 +128,9 @@ export default function RegisterScreen() {
                         </Grid>
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 5 }} />
+                <Box pt={10}/>
+                <Copyright />
             </Container>
+            </ThemeProvider>
     );
 }

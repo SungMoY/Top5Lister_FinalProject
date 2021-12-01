@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 
 export default function Copyright(props) {
     return (
-        <Typography variant="body2" color="white" align="center" {...props}>
+        <Typography variant="body2" color="black" align="center" {...props}>
             {'Copyright © '}
             <Link color="inherit" href="/">
                 The Top 5 Lister

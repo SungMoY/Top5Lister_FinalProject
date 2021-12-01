@@ -44,7 +44,9 @@ export default function SplashScreen() {
             </Box>
                 
             <Box>
-            <Copyright sx={{height: 38, width: 181, mt:"15%", ml:"2%"}}/>
+            <Typography sx={{height: 38, width: 181, mt:"13%", ml:"2%"}} color="common.white" align="center">
+                Sung Mo Yang <br/> Stony Brook University <br/> 2021
+            </Typography>
             </Box>
 
         </Box>
