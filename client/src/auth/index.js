@@ -111,7 +111,7 @@ function AuthContextProvider(props) {
     }
     
     auth.registerUser = async function(userData, store) {
-        //console.log("auth.registerUser called with", userData)
+        console.log("auth.registerUser called with", userData)
         try {
             const response = await api.registerUser(userData);
             if (response.status === 200) {
