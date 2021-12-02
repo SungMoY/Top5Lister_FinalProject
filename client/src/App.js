@@ -7,10 +7,9 @@ import theme from './theme';
 import { ThemeProvider} from '@mui/material';
 import {
     AppBanner,
-    HomeWrapper,
     LoginScreen,
     RegisterScreen,
-    WorkspaceScreen,
+    ScreenWrapper
 } from './components'
 /*
     This is our application's top-level component.
@@ -33,12 +32,10 @@ const App = () => {
                 <GlobalStoreContextProvider>              
                     <AppBanner />
                     <Switch>
-                        <Route path="/" exact component={HomeWrapper} />
+                        <Route path="/" exact component={ScreenWrapper} />
                         <Route path="/login/" exact component={LoginScreen} />
                         <Route path="/register/" exact component={RegisterScreen} />
-                        <Route path="/top5list/:id" exact component={WorkspaceScreen} />
                     </Switch>
-                    
                 </GlobalStoreContextProvider>
             </AuthContextProvider>
         </BrowserRouter>

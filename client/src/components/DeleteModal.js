@@ -6,7 +6,6 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Modal from '@mui/material/Modal';
 import { useContext } from 'react';
 import GlobalStoreContext from "../store";
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
 

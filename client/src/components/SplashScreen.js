@@ -1,16 +1,28 @@
+import { React, useContext } from "react";
 import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import theme from '../theme';
 import { ThemeProvider} from '@mui/material';
 import { Button } from '@mui/material';
+import AuthContext from '../auth'
 
 export default function SplashScreen() {
-    return (
-        <ThemeProvider theme={theme}>
 
-        <Box sx={{ width: "100%", 
-                    height: "94.1%", 
-                    background: 'linear-gradient(to top, #1c2f69, #8c93ca)'
+    const { auth } = useContext(AuthContext);
+
+    console.log("AUTH: ", auth)
+
+    function handleGuestModeClick() {
+        auth.enableGuestMode()
+    }
+
+    return (
+        <ThemeProvider theme={theme}>        
+        <Container
+                maxWidth="xl"
+                sx={{  
+                    background: 'linear-gradient(to top, #1c2f69, #8c93ca)',
+                    paddingBottom:8.3
                 }}>
 
             <Box pt={15}></Box>
@@ -26,12 +38,12 @@ export default function SplashScreen() {
             <Box pt={8}></Box>
 
             <Box>
-                <Button variant="contained" color="secondary" sx={{height: 75, width: 200, mx: "33.25%"}} href="/register">
+                <Button variant="contained" color="secondary" sx={{height: 75, width: 200, mx: "32.75%"}} href="/register">
                 <Typography variant="h5">
                     Register
                     </Typography>
                 </Button>
-                <Button variant="contained" color="secondary" sx={{height: 75, width: 200, mx: "-25.72%"}} href="/login">
+                <Button variant="contained" color="secondary" sx={{height: 75, width: 200, mx: "-25%"}} href="/login">
                 <Typography variant="h5">
                     Login
                     </Typography>
@@ -41,7 +53,7 @@ export default function SplashScreen() {
             <Box pt={6}></Box>
 
             <Box>
-            <Button variant="contained" color="secondary" sx={{height: 38, width: 181, mx: '44.125%'}}>
+            <Button variant="contained" color="secondary" sx={{height: 38, width: 181, mx: '44.125%'}} onClick={handleGuestModeClick} >
                     <Typography variant="subtitle2">
                     Continue As Guest
                     </Typography>
@@ -54,13 +66,8 @@ export default function SplashScreen() {
             </Typography>
             </Box>
 
-        </Box>
+        </Container>
 
         </ThemeProvider>
     )
 }
-
-/*
-<MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
-            */

@@ -11,21 +11,23 @@ export const AuthActionType = {
     REGISTER_USER: "REGISTER_USER",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
-    REGISTER_ERROR: "REGISTER_ERROR"
+    REGISTER_ERROR: "REGISTER_ERROR",
+    GUEST_MODE: "GUEST_MODE"
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
         loggedIn: false,
-        registerErrorCode: 0
+        registerErrorCode: 0,
+        guestMode: false
     });
     const history = useHistory();
 
     useEffect(() => {
         //console.log("useeffect called for first initialization")
         auth.getLoggedIn();
-    }, []);
+    }, [auth]);
 
     const authReducer = (action) => {
         //console.log("ENTERED REDUCER")
@@ -36,7 +38,8 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: payload.loggedIn,
-                    registerErrorCode: 0
+                    registerErrorCode: 0,
+                    guestMode: false
                 });
             }
             case AuthActionType.REGISTER_USER: {
@@ -44,28 +47,40 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    registerErrorCode: 0
+                    registerErrorCode: 0,
+                    guestMode: false
                 })
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    registerErrorCode: 0
+                    registerErrorCode: 0,
+                    guestMode: false
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
                     loggedIn: false,
-                    registerErrorCode: 0
+                    registerErrorCode: 0,
+                    guestMode: false
                 })
             }
             case AuthActionType.REGISTER_ERROR: {
                 return setAuth({
                     user: auth.user,
                     loggedIn: auth.loggedIn,
-                    registerErrorCode: payload.errorCode
+                    registerErrorCode: payload.errorCode,
+                    guestMode: false
+                })
+            }
+            case AuthActionType.GUEST_MODE: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false,
+                    registerErrorCode: 0,
+                    guestMode: payload.guestMode
                 })
             }
             default:
@@ -82,11 +97,20 @@ function AuthContextProvider(props) {
         })
     }
 
+    auth.enableGuestMode = async function () {
+        authReducer({
+            type: AuthActionType.GUEST_MODE,
+            payload: {
+                guestMode: true
+            }
+        })
+    }
+
     auth.getLoggedIn = async function () {
         //console.log("getloggedin useeffect called at src/auth/index.js")
         let isErr = false;
         try {
-            const response = await api.getLoggedIn();
+            await api.getLoggedIn();
             //console.log("getLoggedIn response data: ", response.data)
         } catch (error) {
             //console.log("Error in api.getLoggedIn(), Most likely bc there is no login token")
