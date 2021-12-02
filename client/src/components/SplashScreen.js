@@ -3,14 +3,13 @@ import { Typography } from '@mui/material';
 import theme from '../theme';
 import { ThemeProvider} from '@mui/material';
 import { Button } from '@mui/material';
-import Copyright from './Copyright';
 
 export default function SplashScreen() {
     return (
         <ThemeProvider theme={theme}>
 
         <Box sx={{ width: "100%", 
-                    height: "94.4%", 
+                    height: "94.1%", 
                     background: 'linear-gradient(to top, #1c2f69, #8c93ca)'
                 }}>
 
@@ -27,19 +26,25 @@ export default function SplashScreen() {
             <Box pt={8}></Box>
 
             <Box>
-                <Button variant="contained" color="secondary" sx={{height: 75, width: 200, mx: 64}} href="/register">
+                <Button variant="contained" color="secondary" sx={{height: 75, width: 200, mx: "33.25%"}} href="/register">
+                <Typography variant="h5">
                     Register
+                    </Typography>
                 </Button>
-                <Button variant="contained" color="secondary" sx={{height: 75, width: 200, mx: -50}} href="/login">
+                <Button variant="contained" color="secondary" sx={{height: 75, width: 200, mx: "-25.72%"}} href="/login">
+                <Typography variant="h5">
                     Login
+                    </Typography>
                 </Button>
             </Box>
 
             <Box pt={6}></Box>
 
             <Box>
-            <Button variant="contained" color="secondary" sx={{height: 38, width: 181, mx: 84.5}}>
-                    Continue as Guest
+            <Button variant="contained" color="secondary" sx={{height: 38, width: 181, mx: '44.125%'}}>
+                    <Typography variant="subtitle2">
+                    Continue As Guest
+                    </Typography>
                 </Button>
             </Box>
                 
