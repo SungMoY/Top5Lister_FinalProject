@@ -5,6 +5,7 @@ import theme from '../theme';
 import { ThemeProvider} from '@mui/material';
 import { Button } from '@mui/material';
 import AuthContext from '../auth'
+import { Paper } from "@mui/material";
 
 export default function SplashScreen() {
 
@@ -19,7 +20,7 @@ export default function SplashScreen() {
     return (
         <ThemeProvider theme={theme}>        
         <Container
-                maxWidth="xl"
+                maxWidth="sm"
                 sx={{  
                     background: 'linear-gradient(to top, #1c2f69, #8c93ca)',
                     paddingBottom:8.3

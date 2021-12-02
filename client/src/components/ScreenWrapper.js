@@ -9,13 +9,7 @@ export default function ScreenWrapper() {
 
     console.log("AUTH: ", auth)
 
-    if (auth.guestMode) {
-        console.log("auth.guestMode is true")
-        return (
-            <AppScreen/>
-        )
-    } else if (auth.loggedIn) {
-        console.log("auth.loggedIn is true")
+    if (auth.guestMode || auth.loggedIn) {
         return (
             <AppScreen/>
         )

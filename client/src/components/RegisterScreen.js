@@ -40,7 +40,6 @@ export default function RegisterScreen() {
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <RegisterModal />
-                <CssBaseline />
                 <Box
                     sx={{
                         marginTop: 8,

@@ -10,13 +10,13 @@ export default function AppScreen() {
     console.log("AppScreen auth.guestMode: " + auth.guestMode);
 
     let textMsg = "blank"
-
     if (auth.loggedIn) {
+        console.log("Logged In is true")
         textMsg = "Logged In"
     } else if (auth.guestMode) {
+        console.log("Guest Mode is true")
         textMsg = "Guest Mode"
     }
-
     return (
         <Box>
             <Typography>

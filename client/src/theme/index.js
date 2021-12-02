@@ -15,8 +15,6 @@ const theme = createTheme({
             '@global': {
                 body: {
                     background: 'linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%)',
-                    backgroundRepeat: "no-repeat",
-                    backgroundAttachment: "fixed",
                 }
             }
         }

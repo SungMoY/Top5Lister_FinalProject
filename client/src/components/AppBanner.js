@@ -98,7 +98,6 @@ export default function AppBanner() {
                         </Box>
                     </Box>
                 </Button>
-
                 </ThemeProvider>
             )
         } else {
