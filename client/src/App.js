@@ -9,7 +9,6 @@ import {
     AppBanner,
     LoginScreen,
     RegisterScreen,
-    ScreenWrapper,
     AppScreen,
     SplashScreen
 } from './components'

@@ -104,6 +104,7 @@ function AuthContextProvider(props) {
                 guestMode: true
             }
         })
+        console.log(auth.guestMode)
     }
 
     auth.getLoggedIn = async function () {

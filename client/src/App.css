@@ -116,7 +116,7 @@ body {
   width: 97.4%;
   height: 87%;
   background-color: var(--swatch-primary);
-  border: 1px solid black
+  /*border: 1px solid black*/
 }
 
 #top5-statusbar {
