@@ -1,29 +1,31 @@
 import { React, useContext } from "react";
 import Box from '@mui/material/Box';
-import { Container, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import theme from '../theme';
 import { ThemeProvider} from '@mui/material';
 import { Button } from '@mui/material';
 import AuthContext from '../auth'
-import { Paper } from "@mui/material";
+import { useHistory } from "react-router";
 
 export default function SplashScreen() {
 
     const { auth } = useContext(AuthContext);
 
+    const history = useHistory();
+
     console.log("AUTH: ", auth)
 
     function handleGuestModeClick() {
         auth.enableGuestMode()
+        history.push("/app")
     }
 
     return (
         <ThemeProvider theme={theme}>        
-        <Container
-                maxWidth="sm"
+        <Box
                 sx={{  
                     background: 'linear-gradient(to top, #1c2f69, #8c93ca)',
-                    paddingBottom:8.3
+                    pb:7.5,
                 }}>
 
             <Box pt={15}></Box>
@@ -58,6 +60,7 @@ export default function SplashScreen() {
                     <Typography variant="subtitle2">
                     Continue As Guest
                     </Typography>
+
                 </Button>
             </Box>
                 
@@ -67,7 +70,7 @@ export default function SplashScreen() {
             </Typography>
             </Box>
 
-        </Container>
+        </Box>
 
         </ThemeProvider>
     )

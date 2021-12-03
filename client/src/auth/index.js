@@ -27,7 +27,7 @@ function AuthContextProvider(props) {
     useEffect(() => {
         //console.log("useeffect called for first initialization")
         auth.getLoggedIn();
-    }, [auth]);
+    }, []);
 
     const authReducer = (action) => {
         //console.log("ENTERED REDUCER")
@@ -147,7 +147,7 @@ function AuthContextProvider(props) {
                     }
                 })
                 //console.log("after calling reducer", auth.user, auth.loggedIn, auth.registerErrorCode)
-                history.push("/");
+                history.push("/app");
                 store.loadIdNamePairs();
             }
         } catch (error) {
@@ -177,7 +177,7 @@ function AuthContextProvider(props) {
                     }
                 })
                 //console.log("After reducer is called: ", auth.user, auth.loggedIn)
-                history.push("/");
+                history.push("/app");
                 store.loadIdNamePairs();
             }
         } catch (error) {

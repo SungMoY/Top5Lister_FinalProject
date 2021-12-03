@@ -2,9 +2,10 @@ import AppBanner from './AppBanner'
 import ListCard from './ListCard'
 import LoginScreen from './LoginScreen'
 import RegisterScreen from './RegisterScreen'
-import SplashScreen from './ScreenWrapper'
+import SplashScreen from './SplashScreen'
 import Statusbar from './Statusbar'
-import ScreenWrapper from './ScreenWrapper'
+import AppScreen from './AppScreen'
+import MenuBar from './MenuBar'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -12,10 +13,11 @@ import ScreenWrapper from './ScreenWrapper'
     @author McKilla Gorilla
 */
 export { 
-    AppBanner, 
+    AppBanner,
+    AppScreen, 
     ListCard,
-    LoginScreen, 
+    LoginScreen,
+    MenuBar,
     RegisterScreen,
     SplashScreen,
-    ScreenWrapper,
     Statusbar }

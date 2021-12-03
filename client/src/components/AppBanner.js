@@ -126,16 +126,17 @@ export default function AppBanner() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" style={{ background: '#e0e0e0' }} height="100">
+            <AppBar position="static" style={{ background: '#e0e0e0' }}>
                 <Toolbar variant="dense">
-
                     <Typography                        
-                        variant="h4"
+                        variant="h3"
                         noWrap
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}                        
                     >
-                        <Link style={{ textDecoration: 'none', color: "#d4af37" }} to='/'>T<sup>5</sup>L</Link>
+                        {auth.loggedIn ? 
+                        (<Link style={{ textDecoration: 'none', color: "#d4af37" }} to='/app'>T<sup>5</sup>L</Link>) : 
+                        (<Link style={{ textDecoration: 'none', color: "#d4af37" }} to='/'>T<sup>5</sup>L</Link>) }
                     </Typography>
 
                     <Box sx={{ flexGrow: 1 }}>
