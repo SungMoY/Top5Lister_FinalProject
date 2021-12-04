@@ -51,7 +51,7 @@ body {
   background-image: linear-gradient(to bottom, #b8b808, #636723);
   color: white;
   font-size: 48pt;
-  border-color: black;
+  border-color: red;
   border-width: 2px;
   border-style: solid;
   border-radius: 10px;
@@ -119,6 +119,7 @@ body {
   /*border: 1px solid black*/
 }
 
+/*Status bar css*/
 #top5-statusbar {
   position: absolute;
   left: 0%;
@@ -129,8 +130,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 36pt;
-  border: 1px solid black
+  font-size: 30pt;
+  border: 1px solid black;
+  color: black
 }
 
 #list-selector-heading {

@@ -209,7 +209,6 @@ function AuthContextProvider(props) {
                     }
                 })
                 history.push("/");
-                //store.loadIdNamePairs();
             }
         } catch (error) {
             console.log("Logout Error: ", error)

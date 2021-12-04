@@ -17,6 +17,7 @@ import AuthContext from '../auth'
 export default function MenuBar() {
 
     const { store } = useContext(GlobalStoreContext);
+    const [text, setText] = useState("");
 
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -89,6 +90,15 @@ export default function MenuBar() {
         handleMenuClose()
     }
 
+    const handleUpdateText = (event) => {
+        setText(event.target.value)
+    }
+    const handleKeyPress = (event) => {
+        if (event.code === "Enter") {
+            store.searchFunction(text)
+        }
+    }
+
     return (
         <div>
             <Grid container>
@@ -126,6 +136,9 @@ export default function MenuBar() {
                         borderRadius:1,
                         zIndex:1
                         }}
+                        onChange = {handleUpdateText}
+                        onKeyPress = {handleKeyPress}
+                        value = {text}
                         />
                 </Grid>
 

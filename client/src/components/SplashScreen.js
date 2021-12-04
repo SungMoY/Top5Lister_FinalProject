@@ -6,16 +6,20 @@ import { ThemeProvider} from '@mui/material';
 import { Button } from '@mui/material';
 import AuthContext from '../auth'
 import { useHistory } from "react-router";
+import { GlobalStoreContext } from '../store'
+
 
 export default function SplashScreen() {
 
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
 
     const history = useHistory();
 
     console.log("AUTH: ", auth)
 
     function handleGuestModeClick() {
+        store.setCurrentPage("COMMUNITY")
         auth.enableGuestMode()
         history.push("/app")
     }

@@ -1,4 +1,3 @@
-import { Global } from '@emotion/react';
 import { createContext, useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import api from '../api'
@@ -39,7 +38,8 @@ function GlobalStoreContextProvider(props) {
         listBeingEdited: null,
         listMarkedForDeletion: null,
         communityListIdNamePairs: [],
-        currentPage: "COMMUNITY"
+        currentPage: null,
+        currentSearch: null
     });
     const history = useHistory();
 
@@ -80,14 +80,14 @@ function GlobalStoreContextProvider(props) {
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
                 return setStore({
-                    idNamePairs: payload,
+                    idNamePairs: payload.selected,
                     shownIdNamePairs: store.shownIdNamePairs,
                     currentList: null,
                     newListCounter: store.newListCounter,
                     listBeingEdited: null,
                     listMarkedForDeletion: null,
                     communityListIdNamePairs: store.communityListIdNamePairs,
-                    currentPage: store.currentPage
+                    currentPage: payload.page
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -152,7 +152,7 @@ function GlobalStoreContextProvider(props) {
     // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.
 
     // THIS FUNCTION SETS THE CURRENT PAGE BETWEEN HOME, USERS, GROUP, COMMUNITY
-    store.setCurrentPage = async function (pageChange) {
+    store.setCurrentPage = function (pageChange) {
         let changeLoad = ""
         console.log("PAGE CHANGE IN STORE FUNCIONT IS: ", pageChange)
         switch (pageChange) {
@@ -179,13 +179,20 @@ function GlobalStoreContextProvider(props) {
         console.log("AFTER CALLING REDUCER, STORE.CURRENTPAGE IS NOW", store.currentPage)
     }
 
+    // HANDLES SEARCHING
+    store.searchFunction = function (searchText) {
+        console.log("SearchText: ", searchText)
+        //update currentSearch in store
+        //parse through idNamePairs
+        //update shown idNamePairs to show the ones hit by search
+    }
+
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
         storeReducer({
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
             payload: {}
         });
-        history.push("/");
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -231,7 +238,10 @@ function GlobalStoreContextProvider(props) {
             //console.log("SELECTEDPAIRSARRAY: ", selectedPairsArray)
             storeReducer({
                 type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-                payload: selectedPairsArray
+                payload: {
+                    selected: selectedPairsArray,
+                    page: "HOME"
+                }
             });
 
         }
