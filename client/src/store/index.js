@@ -22,6 +22,7 @@ export const GlobalStoreActionType = {
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
     UNMARK_LIST_FOR_DELETION: "UNMARK_LIST_FOR_DELETION",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
+    SET_CURRENT_SEARCH: "SET_CURRENT_SEARCH"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -61,7 +62,8 @@ function GlobalStoreContextProvider(props) {
                     listBeingEdited: null,
                     listMarkedForDeletion: null,
                     communityListIdNamePairs: store.communityListIdNamePairs,
-                    currentPage: store.currentPage
+                    currentPage: store.currentPage,
+                    currentSearch: store.currentSearch
                 })
             }
             // CREATE A NEW LIST
@@ -74,7 +76,8 @@ function GlobalStoreContextProvider(props) {
                     listBeingEdited: null,
                     listMarkedForDeletion: null,
                     communityListIdNamePairs: store.communityListIdNamePairs,
-                    currentPage: store.currentPage
+                    currentPage: store.currentPage,
+                    currentSearch: store.currentSearch
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -87,7 +90,8 @@ function GlobalStoreContextProvider(props) {
                     listBeingEdited: null,
                     listMarkedForDeletion: null,
                     communityListIdNamePairs: store.communityListIdNamePairs,
-                    currentPage: payload.page
+                    currentPage: payload.page,
+                    currentSearch: store.currentSearch
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -100,7 +104,8 @@ function GlobalStoreContextProvider(props) {
                     listBeingEdited: null,
                     listMarkedForDeletion: payload,
                     communityListIdNamePairs: store.communityListIdNamePairs,
-                    currentPage: store.currentPage
+                    currentPage: store.currentPage,
+                    currentSearch: store.currentSearch
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -113,7 +118,8 @@ function GlobalStoreContextProvider(props) {
                     listBeingEdited: null,
                     listMarkedForDeletion: null,
                     communityListIdNamePairs: store.communityListIdNamePairs,
-                    currentPage: store.currentPage
+                    currentPage: store.currentPage,
+                    currentSearch: store.currentSearch
                 });
             }
             // UPDATE A LIST
@@ -126,7 +132,8 @@ function GlobalStoreContextProvider(props) {
                     listBeingEdited: null,
                     listMarkedForDeletion: null,
                     communityListIdNamePairs: store.communityListIdNamePairs,
-                    currentPage: store.currentPage
+                    currentPage: store.currentPage,
+                    currentSearch: store.currentSearch
                 });
             }
             // CHANGE BETWEEN PAGES, DEFAULT IS COMMUNITY FOR GUEST MODE
@@ -139,7 +146,22 @@ function GlobalStoreContextProvider(props) {
                     listBeingEdited: store.listBeingEdited,
                     listMarkedForDeletion: store.listMarkedForDeletion,
                     communityListIdNamePairs: store.communityListIdNamePairs,
-                    currentPage: payload
+                    currentPage: payload,
+                    currentSearch: null
+                })
+            }
+            // HANDLING SEARCHES - need to implement once more data
+            case GlobalStoreActionType.SET_CURRENT_SEARCH: {
+                return setStore({
+                    idNamePairs: store.idNamePairs,
+                    shownIdNamePairs: store.shownIdNamePairs,
+                    currentList: store.currentList,
+                    newListCounter: store.newListCounter,
+                    listBeingEdited: store.listBeingEdited,
+                    listMarkedForDeletion: store.listMarkedForDeletion,
+                    communityListIdNamePairs: store.communityListIdNamePairs,
+                    currentPage: store.currentPage,
+                    currentSearch: payload
                 })
             }
             default:
@@ -185,6 +207,11 @@ function GlobalStoreContextProvider(props) {
         //update currentSearch in store
         //parse through idNamePairs
         //update shown idNamePairs to show the ones hit by search
+
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_SEARCH,
+            payload: searchText
+        })
     }
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
@@ -213,7 +240,7 @@ function GlobalStoreContextProvider(props) {
             );
 
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-            history.push("/top5list/" + newList._id);
+            //history.push("/top5list/" + newList._id);
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
@@ -302,7 +329,7 @@ function GlobalStoreContextProvider(props) {
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
                     payload: top5List
                 });
-                history.push("/top5list/" + top5List._id);
+                //history.push("/top5list/" + top5List._id);
             }
         }
     }

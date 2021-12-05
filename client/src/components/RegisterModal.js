@@ -50,6 +50,10 @@ export default function RegisterModal() {
             modalDialog = "Email or password is incorrect."
             break
         }
+        case 6: {
+            modalDialog = "An account with this username already exists."
+            break
+        }
         default:
             modalDialog = "Error with the error lol"
             break

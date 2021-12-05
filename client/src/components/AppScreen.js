@@ -5,8 +5,9 @@ import { Statusbar } from '.';
 import { GlobalStoreContext } from '../store'
 import { Box } from '@mui/system';
 import { useHistory } from 'react-router-dom'
-
-
+import { ListCard } from '.';
+import List from '@mui/material/List';
+import { WorkspaceScreen } from '.';
 
 export default function AppScreen() {
     
@@ -39,12 +40,39 @@ export default function AppScreen() {
             break;
     }
 
+    let listCard=""
+    if (store) {
+        listCard = 
+            <List >
+            {
+                store.idNamePairs.map((pair) => (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                    />
+                ))
+            }
+            </List>;
+    }
+
+
+    let contentRender = ""
+    if (store.currentList) {
+        contentRender =
+            <WorkspaceScreen/>
+    } else {
+        contentRender = 
+        <div id="list-selector-list">
+        {
+            listCard
+        }
+    </div>
+    }
+
     return (
         <div id="top5-workspace">
             <MenuBar/>
-            <Box>
-                {contents}
-            </Box>
+            {contentRender}
             <Statusbar/>
         </div>
     )

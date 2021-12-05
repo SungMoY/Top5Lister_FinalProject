@@ -24,10 +24,12 @@ function AuthContextProvider(props) {
     });
     const history = useHistory();
 
+    /*
     useEffect(() => {
         //console.log("useeffect called for first initialization")
         auth.getLoggedIn();
     }, []);
+    */
 
     const authReducer = (action) => {
         //console.log("ENTERED REDUCER")

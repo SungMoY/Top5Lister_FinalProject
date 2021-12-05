@@ -6,12 +6,15 @@ import SplashScreen from './SplashScreen'
 import Statusbar from './Statusbar'
 import AppScreen from './AppScreen'
 import MenuBar from './MenuBar'
+import WorkspaceScreen from './WorkspaceScreen'
+
 /*
     This serves as a module so that we can import
     all the other components as we wish.
     
     @author McKilla Gorilla
 */
+
 export { 
     AppBanner,
     AppScreen, 
@@ -20,4 +23,5 @@ export {
     MenuBar,
     RegisterScreen,
     SplashScreen,
-    Statusbar }
+    Statusbar,
+    WorkspaceScreen }

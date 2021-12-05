@@ -6,6 +6,12 @@ import ListItem from '@mui/material/ListItem';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import { Button, Typography } from '@mui/material';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -19,6 +25,8 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const { idNamePair } = props;
     const [text, setText] = useState(idNamePair.name);
+
+    console.log("IDNAMEPAIR: ", idNamePair)
 
     function handleLoadList(event, id) {
         if (!event.target.disabled) {
@@ -57,76 +65,110 @@ function ListCard(props) {
         store.markListForDeletion(id);
     }
 
-    function handleKeyPress(event) {
-        if (event.code === "Enter") {
-            let id = event.target.id.substring("list-".length);
-            //console.log("TEXT VALUES: ", text, idNamePair.name)
-            //This if statement is required when editing a list name after editing a previous one. Reseting 'text' value to compare onChange text with
-            if (text !== idNamePair.name) {
-                store.changeListName(id, text);
-                toggleEdit();
-            } else {
-                toggleEdit();
-            }
-        }
+    function handleEditScreen(event, id) {
+        store.setCurrentList(id)
     }
-    function handleUpdateText(event) {
-        //console.log("EVENT TARGET:", event.target.value)
-        setText(event.target.value);
-    }
+
+    //  use this to change background color based on published or not
+    let backcolor='white'
+
+    // use this to edit the list, changed to publish date if published, maybe use boolean condition to swap between the two?
+    let edit="Edit"
+
+    // use this to present likes. NOT shown if list is unpublished
+    let likeCount=100
+
+    // use this to present dislikes. NOT shown if list is unpublished
+    let dislikeCount=100
+
+    // use this to get view count of current list
+    let viewCount=100
 
     let cardElement =
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
-            button
-            onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }
-            }
-            style={{
-                fontSize: '48pt',
-                width: '100%'
-            }}
+            sx={{ marginBottom: '15px', display: 'flex', p: 1, border:1, borderColor:'black', borderRadius:3, bgcolor:backcolor, height:100}}
+            divider
         >
-                <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-                <Box sx={{ p: 1 }}>
-                    <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                        <EditIcon style={{fontSize:'48pt'}} />
-                    </IconButton>
-                </Box>
-                <Box sx={{ p: 1 }}>
-                    <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                        <DeleteIcon style={{fontSize:'48pt'}} />
-                    </IconButton>
-                </Box>
+            <Box sx={{p:1, fontSize:25, fontWeight: 'bold', position:'absolute', top:'0%'}}>
+                {idNamePair.name}
+            </Box>
+
+            <Box sx={{p:1, fontSize:15, position:'absolute', top:'37%'}}>
+                By: {idNamePair.username}
+            </Box>
+
+            <Button sx={{p:1, fontSize:15, position:'absolute', left:'0%', top:'58%'}}
+                onClick = {(event)=>{handleEditScreen(event, idNamePair._id)}}
+            >
+                {edit}
+            </Button>
+
+            <Box sx={{p:1, position:'absolute', left:'70.2%', bottom:'30%'}}>
+                <IconButton sx={{color:'black'}}>
+                    <ThumbUpOutlinedIcon sx={{fontSize:40}}/>
+                </IconButton>
+            </Box>
+
+            <Box sx={{p:1, position:'absolute', left:'74%', top:'12%'}}>
+                {likeCount}
+            </Box>
+
+            <Box sx={{p:1, fontSize:15, position:'absolute', left:'81%', bottom:'30%'}}>
+                <IconButton sx={{color:'black'}}>
+                    <ThumbDownOutlinedIcon sx={{fontSize:40}}/>
+                </IconButton>
+            </Box>
+
+            <Box sx={{p:1, fontSize:15, position:'absolute', left:'85%', top:'12%'}}>
+                {dislikeCount}
+            </Box>
+
+            <Box sx={{p:1, fontSize:15, position:'absolute', left:'75%', top:'57%'}}>
+                Views: {viewCount}
+            </Box>
+
+            <Box sx={{p:1, fontSize:15, position:'absolute', left:'92%', bottom:'35%'}}>
+                <IconButton sx={{color:'black'}}>
+                    <DeleteIcon sx={{fontSize:40}}/>
+                </IconButton>
+            </Box>
+
+            <Box sx={{p:1, fontSize:15, position:'absolute', left:'92%', top:'35%'}}>
+                <IconButton sx={{color:'black'}}>
+                    <KeyboardDoubleArrowDownIcon sx={{fontSize:40}}/>
+                </IconButton>
+            </Box>
+
         </ListItem>
 
-    if (editActive) {
-        cardElement =
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                id={"list-" + idNamePair._id}
-                label=""
-                name="name"
-                autoComplete="Top 5 List Name"
-                className='list-card'
-                onKeyPress={handleKeyPress}
-                onChange={handleUpdateText}
-                defaultValue={idNamePair.name}
-                inputProps={{style: {fontSize: 48}}}
-                InputLabelProps={{style: {fontSize: 24}}}
-                autoFocus
-            />
+        return (
+            cardElement
+            );
     }
-    return (
-        cardElement
-    );
-}
 
 export default ListCard;
+
+/*
+
+ml:172, mt:6
+
+<Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+
+
+<Box sx={{ p: 1 }}>
+    <IconButton onClick={handleToggleEdit} aria-label='edit'>
+        <EditIcon style={{fontSize:'48pt'}} />
+    </IconButton>
+</Box>
+
+<Box sx={{ p: 1 }}>
+    <IconButton onClick={(event) => {
+                handleDeleteList(event, idNamePair._id)
+                }} aria-label='delete'>
+        <DeleteIcon style={{fontSize:'48pt'}} />
+    </IconButton>
+</Box>
+
+*/

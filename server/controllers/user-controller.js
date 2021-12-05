@@ -11,6 +11,7 @@ getLoggedIn = async (req, res) => {
                 user: {
                     firstName: loggedInUser.firstName,
                     lastName: loggedInUser.lastName,
+                    username: loggedInUser.username,
                     email: loggedInUser.email
                 }
                 }).send();
@@ -23,8 +24,8 @@ getLoggedIn = async (req, res) => {
 
 registerUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, password, passwordVerify } = req.body;
-        if (!firstName || !lastName || !email || !password || !passwordVerify) {
+        const { firstName, lastName, username, email, password, passwordVerify } = req.body;
+        if (!firstName || !lastName || !username || !email || !password || !passwordVerify) {
             return res
                 .status(400)
                 .json({ 
@@ -48,14 +49,24 @@ registerUser = async (req, res) => {
                     errorCode: 3
                 })
         }
-        const existingUser = await User.findOne({ email: email });
-        if (existingUser) {
+        const existingUserEmail = await User.findOne({ email: email });
+        if (existingUserEmail) {
             return res
                 .status(400)
                 .json({
                     success: false,
                     errorMessage: "An account with this email address already exists.",
                     errorCode: 4
+                })
+        }
+        const existingUserUsername = await User.findOne({ username: username });
+        if (existingUserUsername) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    errorMessage: "An account with this username already exists.",
+                    errorCode: 6
                 })
         }
 
@@ -66,7 +77,7 @@ registerUser = async (req, res) => {
 
         //Create a user object to be saved
         const newUser = new User({
-            firstName, lastName, email, passwordHash
+            firstName, lastName, username, email, passwordHash
         });
         //save the created user object into the database
         const savedUser = await newUser.save();
@@ -83,6 +94,7 @@ registerUser = async (req, res) => {
             user: {
                 firstName: savedUser.firstName,
                 lastName: savedUser.lastName,
+                username: savedUser.username,
                 email: savedUser.email
             }
         }).send();

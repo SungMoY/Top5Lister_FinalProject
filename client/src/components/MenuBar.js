@@ -138,7 +138,7 @@ export default function MenuBar() {
                         }}
                         onChange = {handleUpdateText}
                         onKeyPress = {handleKeyPress}
-                        value = {text}
+                        defaultValue={text}
                         />
                 </Grid>
 
