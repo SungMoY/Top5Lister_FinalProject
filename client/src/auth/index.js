@@ -1,4 +1,5 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
+//import { useEffect } from "react";
 import { useHistory } from 'react-router-dom'
 import api from '../api'
 
@@ -151,7 +152,7 @@ function AuthContextProvider(props) {
                 })
                 //console.log("after calling reducer", auth.user, auth.loggedIn, auth.registerErrorCode)
                 history.push("/app");
-                store.loadIdNamePairs();
+                store.loadIdNamePairsHOME();
             }
         } catch (error) {
             //console.log("Register Error: ", error.response.data.errorMessage)
@@ -181,7 +182,7 @@ function AuthContextProvider(props) {
                 })
                 //console.log("After reducer is called: ", auth.user, auth.loggedIn)
                 history.push("/app");
-                store.loadIdNamePairs();
+                store.loadIdNamePairsHOME();
             }
         } catch (error) {
             //console.log("Login Error: ", error.response.data.errorMessage)
@@ -210,6 +211,7 @@ function AuthContextProvider(props) {
                         loggedIn : false
                     }
                 })
+                store.refreshAll()
                 history.push("/");
             }
         } catch (error) {

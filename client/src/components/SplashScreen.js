@@ -19,7 +19,7 @@ export default function SplashScreen() {
     console.log("AUTH: ", auth)
 
     function handleGuestModeClick() {
-        store.setCurrentPage("COMMUNITY")
+        store.loadIdNamePairsCOMMUNITY()
         auth.enableGuestMode()
         history.push("/app")
     }

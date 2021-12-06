@@ -4,6 +4,8 @@ import { Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import { IconButton } from '@mui/material';
 import { Box } from '@mui/system';
+import AuthContext from '../auth'
+
 
 /*
     Our Status bar React component goes at the bottom of our UI.
@@ -12,9 +14,12 @@ import { Box } from '@mui/system';
 */
 function Statusbar() {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+
 
     function handleCreateNewList() {
-       store.createNewList();
+        console.log("THIS IS AUTH WHEN MAKING NEW LIST:" ,auth)
+        store.createNewList();
     }
     
     //Continue implementation of changing search into here
@@ -27,7 +32,7 @@ function Statusbar() {
     }
 
     let iconButton = ""
-    if (store.currentPage == "HOME") {
+    if (store.currentPage === "HOME") {
         iconButton = 
         <IconButton onClick={handleCreateNewList}>
                 <AddIcon sx={{color:'common.black', fontSize:75}}/>

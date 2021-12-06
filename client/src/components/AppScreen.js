@@ -3,11 +3,11 @@ import AuthContext from '../auth'
 import MenuBar from './MenuBar';
 import { Statusbar } from '.';
 import { GlobalStoreContext } from '../store'
-import { Box } from '@mui/system';
 import { useHistory } from 'react-router-dom'
 import { ListCard } from '.';
 import List from '@mui/material/List';
 import { WorkspaceScreen } from '.';
+import DeleteModal from './DeleteModal';
 
 export default function AppScreen() {
     
@@ -16,12 +16,14 @@ export default function AppScreen() {
     const { auth } = useContext(AuthContext);
     console.log("AppScreen auth.loggedIn: " + auth.loggedIn);
     console.log("AppScreen auth.guestMode: " + auth.guestMode);
+    console.log("AppScreen idNamePairs: ", store.idNamePairs)
 
     const history = useHistory();
     if (!auth.loggedIn && !auth.guestMode) {
         history.push("/")
     }
 
+    /*
     let contents="lists go here"
     switch (store.currentPage) {
         case "HOME":
@@ -39,11 +41,12 @@ export default function AppScreen() {
         default:
             break;
     }
+    */
 
     let listCard=""
-    if (store) {
+    if (store.idNamePairs) {
         listCard = 
-            <List >
+            <List sx={{right:'1%', ml:2}}>
             {
                 store.idNamePairs.map((pair) => (
                     <ListCard
@@ -62,7 +65,7 @@ export default function AppScreen() {
             <WorkspaceScreen/>
     } else {
         contentRender = 
-        <div id="list-selector-list">
+        <div id="list-selector-list" style={{maxHeight: '90%', overflow: 'scroll', overflowX:'hidden'}}>
         {
             listCard
         }
@@ -71,6 +74,7 @@ export default function AppScreen() {
 
     return (
         <div id="top5-workspace">
+            <DeleteModal/>
             <MenuBar/>
             {contentRender}
             <Statusbar/>

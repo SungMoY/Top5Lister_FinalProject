@@ -58,16 +58,16 @@ export default function MenuBar() {
     };
 
     const handleHomeButton = (event) => {
-        store.setCurrentPage("HOME")
+        store.loadIdNamePairsHOME()
     }
     const handleGroupButton = (event) => {
-        store.setCurrentPage("GROUP")
+        store.loadIdNamePairsGROUP()
     }
     const handleUserButton = (event) => {
-        store.setCurrentPage("USERS")
+        store.loadIdNamePairsUSERS()
     }
     const handleCommunityButton = (event) => {
-        store.setCurrentPage("COMMUNITY")
+        store.loadIdNamePairsCOMMUNITY()
     }
     const sortByDateAscending = (event) => {
         console.log("Sorting By Date Ascending")

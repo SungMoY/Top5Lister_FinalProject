@@ -26,6 +26,8 @@ export default function DeleteModal() {
     let name = ""
     let openBool = false
 
+    console.log("FROM THE DELETE MODAL: ",store.listMarkedForDeletion)
+
     if (store.listMarkedForDeletion !== null) {
         openBool = true
         name = store.listMarkedForDeletion.name

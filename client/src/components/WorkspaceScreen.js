@@ -1,7 +1,5 @@
 import { useContext, useState } from 'react'
-import Top5Item from './Top5Item.js'
-import List from '@mui/material/List';
-import { Typography } from '@mui/material'
+import { Button } from '@mui/material'
 import { GlobalStoreContext } from '../store/index.js'
 import { TextField } from '@mui/material';
 import { Grid } from '@mui/material';
@@ -12,64 +10,95 @@ import Box from '@mui/material/Box';
 
 export default function WorkspaceScreen() {
     const { store } = useContext(GlobalStoreContext);
-    const [text, setText] = useState("");
+    const [name, setName] = useState(store.currentList.name);
+    const [itemOne, setFirst] = useState(store.currentList.items[0]);
+    const [itemTwo, setSecond] = useState(store.currentList.items[1]);
+    const [itemThree, setThird] = useState(store.currentList.items[2]);
+    const [itemFour, setFourth] = useState(store.currentList.items[3]);
+    const [itemFive, setFifth] = useState(store.currentList.items[4]);
 
-
-
-    function handleKeyPress(event) {
-        if (event.code === "Enter") {
-            let index = event.target.id.substring("list-".length);
-            let text = event.target.value;
+    function handleUpdateName(event) {
+        setName(event.target.value);
+    }
+    function handleUpdateItemOne(event) {
+        setFirst(event.target.value);
+    }
+    function handleUpdateItemTwo(event) {
+        setSecond(event.target.value);
+    }
+    function handleUpdateItemThree(event) {
+        setThird(event.target.value);
+    }
+    function handleUpdateItemFour(event) {
+        setFourth(event.target.value);
+    }
+    function handleUpdateItemFive(event) {
+        setFifth(event.target.value);
+    }
+    function handleSaveList(event) {
+        let top5list = {
+            name: name,
+            items: [itemOne, itemTwo, itemThree, itemFour, itemFive],
+            username: store.currentList.username,
+            ownerEmail: store.currentList.ownerEmail,
+            likes: store.currentList.likes,
+            dislikes: store.currentList.dislikes,
+            comments: store.currentList.comments,
+            publish: store.currentList.publish,
+            views: store.currentList.views
         }
+        store.updateCurrentList(top5list)
     }
+    function handlePublishList(event) {
+        let today = new Date();
+        let todayString = today.toDateString()
+        let todaySplit = todayString.split(' ')
+        let todayReturn = todaySplit[1]+" "+todaySplit[2]+", "+todaySplit[3] 
 
-    function handleUpdateText(event) {
-        setText(event.target.value);
-    }
-
-    let editItems = "";
-    if (store.currentList) {
-        editItems = 
-            <List id="edit-items" disablePadding>
-                {
-                    store.currentList.items.map((item, index) => (
-                        <Top5Item 
-                            key={'top5-item-' + (index+1)}
-                            text={item}
-                            index={index} 
-                        />
-                    ))
-                }
-            </List>;
+        let top5list = {
+            name: store.currentList.name,
+            items: [itemOne, itemTwo, itemThree, itemFour, itemFive],
+            username: store.currentList.username,
+            ownerEmail: store.currentList.ownerEmail,
+            likes: store.currentList.likes,
+            dislikes: store.currentList.dislikes,
+            comments: store.currentList.comments,
+            publish: todayReturn,
+            views: store.currentList.views
+        }
+        store.updateCurrentList(top5list)
     }
 
     return (
         <div id="top5-workspace-editing">
             <div id="workspace-edit">
-            <TextField 
+            <TextField
                 placeholder="Search" 
                 size="small" 
                 sx={{ backgroundColor: "white", borderRadius:1, zIndex:1, width:500 }}
-                onChange = {handleUpdateText}
-                onKeyPress = {handleKeyPress}
-                defaultValue={store.currentList.name}
+                onChange = {handleUpdateName}
+                defaultValue={name}
                 />
             <Grid container spacing={1} id="edit-numbering" >
 
 
-
                 <Grid item xs={1}>
                     <Box class="item-number">
-                        1. 
+                        1.
                     </Box>
                 </Grid>
                 <Grid item xs={11}>
                     <Box class="top5-item">
-                        {} again!
+                        <TextField
+                            defaultValue={itemOne}
+                            variant='standard'
+                            sx={{zIndex:1, width:'99%', height:0, borderRadius:2, top:'1%', left:'1%'}}
+                            inputProps={{style: {fontSize: "35pt", height: "50px"}}}
+                            InputProps={{ disableUnderline: true }}
+                            onChange = {handleUpdateItemOne}
+                        />
                     </Box>
                 </Grid>
-
-
 
 
                 <Grid item xs={1}>
@@ -78,10 +107,17 @@ export default function WorkspaceScreen() {
                     </Box>
                 </Grid>
                 <Grid item xs={11}>
-                    Second Item
+                    <Box class="top5-item">
+                        <TextField
+                            defaultValue={itemTwo}
+                            variant='standard'
+                            sx={{zIndex:1, width:'99%', height:0, borderRadius:2, top:'1%', left:'1%'}}
+                            inputProps={{style: {fontSize: "35pt", height: "50px"}}}
+                            InputProps={{ disableUnderline: true }}
+                            onChange = {handleUpdateItemTwo}
+                        />
+                    </Box>                
                 </Grid>
-
-
 
 
                 <Grid item xs={1}>
@@ -90,10 +126,17 @@ export default function WorkspaceScreen() {
                     </Box>
                 </Grid>
                 <Grid item xs={11}>
-                    Third Item
+                    <Box class="top5-item">
+                        <TextField
+                            defaultValue={itemThree}
+                            variant='standard'
+                            sx={{zIndex:1, width:'99%', height:0, borderRadius:2, top:'1%', left:'1%'}}
+                            inputProps={{style: {fontSize: "35pt", height: "50px"}}}
+                            InputProps={{ disableUnderline: true }}
+                            onChange = {handleUpdateItemThree}
+                        />
+                    </Box>                
                 </Grid>
-
-
 
 
                 <Grid item xs={1}>
@@ -102,10 +145,17 @@ export default function WorkspaceScreen() {
                     </Box>
                 </Grid>
                 <Grid item xs={11}>
-                    Fourth Item
+                    <Box class="top5-item">
+                        <TextField
+                            defaultValue={itemFour}
+                            variant='standard'
+                            sx={{zIndex:1, width:'99%', height:0, borderRadius:2, top:'1%', left:'1%'}}
+                            inputProps={{style: {fontSize: "35pt", height: "50px"}}}
+                            InputProps={{ disableUnderline: true }}
+                            onChange = {handleUpdateItemFour}
+                        />
+                    </Box>               
                 </Grid>
-
-
 
 
                 <Grid item xs={1}>
@@ -114,14 +164,33 @@ export default function WorkspaceScreen() {
                     </Box>
                 </Grid>
                 <Grid item xs={11}>
-                    Fifth Item
+                    <Box class="top5-item">
+                        <TextField
+                            defaultValue={itemFive}
+                            variant='standard'
+                            sx={{zIndex:1, width:'99%', height:0, borderRadius:2, top:'1%', left:'1%'}}
+                            inputProps={{style: {fontSize: "35pt", height: "50px"}}}
+                            InputProps={{ disableUnderline: true }}
+                            onChange = {handleUpdateItemFive}
+                        />
+                    </Box>                
                 </Grid>
-
-
 
 
             </Grid>
             </div>
+                <Button
+                    sx={{top:'88%', left:'75%', border:1, width:'7%', height:'9%', bgcolor:'#DDDDDD', fontSize:20}}
+                    onClick={handleSaveList}
+                >
+                    Save
+                </Button>
+                <Button
+                    sx={{top:'88%', left:'79%', border:1, width:'7%', height:'9%', bgcolor:'#DDDDDD', fontSize:20}}
+                    onClick={handlePublishList}
+                    >
+                    Publish
+                </Button>
         </div>
     )
 }

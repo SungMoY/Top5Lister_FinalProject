@@ -3,18 +3,16 @@ const Top5List = require('../models/top5list-model');
 createTop5List = (req, res) => {
     const body = req.body;
     if (!body) {
-        return res.status(400).json({
+        return res.status(401).json({
             success: false,
             error: 'You must provide a Top 5 List',
         })
     }
-
     const top5List = new Top5List(body);
     console.log("creating top5List: " + JSON.stringify(top5List));
     if (!top5List) {
-        return res.status(400).json({ success: false, error: err })
+        return res.status(402).json({ success: false, error: err })
     }
-
     top5List
         .save()
         .then(() => {
@@ -25,7 +23,8 @@ createTop5List = (req, res) => {
             })
         })
         .catch(error => {
-            return res.status(400).json({
+            console.log(error)
+            return res.status(403).json({
                 error,
                 message: 'Top 5 List Not Created!'
             })
@@ -50,9 +49,13 @@ updateTop5List = async (req, res) => {
                 message: 'Top 5 List not found!',
             })
         }
-
+        console.log("IN THE SERVER: ", top5List)
+        console.log("IN THE SERVER2: ", body)
         top5List.name = body.name
         top5List.items = body.items
+        top5List.publish = body.publish
+        top5List.views = body.views
+        //ADD MORE STUFF TO UPDATE HERE
         top5List
             .save()
             .then(() => {
@@ -130,8 +133,14 @@ getTop5ListPairs = async (req, res) => {
                 let pair = {
                     _id: list._id,
                     name: list.name,
+                    items: list.items,
                     username: list.username,
-                    email: list.ownerEmail
+                    email: list.ownerEmail,
+                    comments: list.comments,
+                    likes: list.likes,
+                    dislikes: list.dislikes,
+                    publish: list.publish,
+                    views: list.views
                 };
                 pairs.push(pair);
             }
