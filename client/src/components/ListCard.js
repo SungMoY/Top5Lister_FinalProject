@@ -48,10 +48,12 @@ function ListCard(props) {
     function handleExpanded(event, id) {
         if (auth.loggedIn) {
             if (!expanded && idNamePair.publish !== "unpublished" && idNamePair.username !== auth.user.username) {
+                console.log("ADD VIEW REACHED")
                 store.addView(id)
             }
         } else {
             if (!expanded && idNamePair.publish !== "unpublished") {
+                console.log("ADD VIEW REACHED BY GUEST")
                 store.addView(id)
             }
         }

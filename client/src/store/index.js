@@ -23,7 +23,8 @@ export const GlobalStoreActionType = {
     UNMARK_LIST_FOR_DELETION: "UNMARK_LIST_FOR_DELETION",
     SET_CURRENT_SEARCH: "SET_CURRENT_SEARCH",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
-    RESET: "RESET"
+    RESET: "RESET",
+    UPDATE_SINGLE_LIST_VIEW: "UPDATE_SINGLE_LIST_VIEW"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -140,6 +141,18 @@ function GlobalStoreContextProvider(props) {
                     communityListIdNamePairs: [],
                     currentPage: null,
                     currentSearch: null
+                })
+            }
+            case GlobalStoreActionType.UPDATE_SINGLE_LIST_VIEW: {
+                return setStore({
+                    idNamePairs: payload,
+                    currentList: store.currentList,
+                    newListCounter: store.newListCounter,
+                    listBeingEdited: store.listBeingEdited,
+                    listMarkedForDeletion: store.listMarkedForDeletion,
+                    communityListIdNamePairs: store.communityListIdNamePairs,
+                    currentPage: store.currentPage,
+                    currentSearch: store.currentSearch
                 })
             }
             default:
@@ -385,10 +398,9 @@ function GlobalStoreContextProvider(props) {
             top5List.views = ++top5List.views
 
             let responsetwo = await api.updateTop5ListById(top5List._id, top5List);
-
-            /*
             if (responsetwo.data.success) {
                 //console.log("Incremented view count of "+top5List.name)
+                /*
                 switch (store.currentPage) {
                     case "HOME":
                         store.loadIdNamePairsHOME();
@@ -404,9 +416,18 @@ function GlobalStoreContextProvider(props) {
                         break;
                     default:
                         break;
-                }
+                }*/
+
+                let currentShown = this.idNamePairs
+                let foundListIndex = currentShown.findIndex(element => element._id === id)
+
+                currentShown[foundListIndex] = top5List
+
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_SINGLE_LIST_VIEW,
+                    payload: currentShown
+                })
             }
-            */
         }
     }
     store.addComment = async function (id, commentText) {
