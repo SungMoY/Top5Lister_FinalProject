@@ -5,16 +5,16 @@ import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-//import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-//import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { Button} from '@mui/material';
 import { Grid } from '@mui/material';
-import Divider from '@mui/material/Divider';
-
+import List from '@mui/material/List';
+import { TextField } from '@mui/material';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -25,8 +25,14 @@ import Divider from '@mui/material/Divider';
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
+    const [commentText, setCommentText] = useState("")
     const { idNamePair } = props;
     const [expanded, setExpanded] = useState(false)
+
+    let guestDisable = false
+    if (auth.guestMode) {
+        guestDisable = true
+    }
 
     //console.log("IDNAMEPAIR: ", idNamePair)
 
@@ -44,6 +50,25 @@ function ListCard(props) {
             store.addView(id)
         }
         setExpanded(!expanded)
+    }
+
+    function handleChangeCommentText(event, id) {
+        setCommentText(event.target.value)
+    }
+
+    function handleAddComment(event, id) {
+        if (event.code === "Enter") {
+            store.addComment(idNamePair._id, commentText)
+            setCommentText("")
+        }
+    }
+
+    function handleLikeList(event, id) {
+        store.handleLike(idNamePair._id)
+    }
+
+    function handleDislikeList(event, id) {
+        store.handleDislike(idNamePair._id)
     }
 
     // use this to present likes. NOT shown if list is unpublished
@@ -82,11 +107,29 @@ function ListCard(props) {
     let LikeButton =
         <div>
         <Box sx={{p:1, position:'absolute', left:'70.2%', bottom:(expanded?'87.3%':'30%')}}>
-                <IconButton sx={{color:'black'}}>
+                <IconButton sx={{color:'black'}}
+                disabled={guestDisable}
+                onClick={handleLikeList}
+                >
                     <ThumbUpOutlinedIcon sx={{fontSize:40}}/>
                 </IconButton>
             </Box>
         </div>
+    if (auth.user) {
+        if (idNamePair.likes.includes(auth.user.username)) {
+            LikeButton =
+            <div>
+            <Box sx={{p:1, position:'absolute', left:'70.2%', bottom:(expanded?'87.3%':'30%')}}>
+                    <IconButton sx={{color:'black'}}
+                    disabled={guestDisable}
+                    onClick={handleLikeList}
+                    >
+                        <ThumbUpIcon sx={{fontSize:40}}/>
+                    </IconButton>
+                </Box>
+            </div>
+        }
+    }
     
     let LikeCounter =
         <div>
@@ -98,11 +141,27 @@ function ListCard(props) {
     let DislikeButton = 
         <div>
         <Box sx={{p:1, fontSize:15, position:'absolute', left:'81%', bottom:(expanded?'87.3%':'30%')}}>
-            <IconButton sx={{color:'black'}}>
+            <IconButton sx={{color:'black'}}
+            disabled={guestDisable}
+            onClick={handleDislikeList}>
                 <ThumbDownOutlinedIcon sx={{fontSize:40}}/>
             </IconButton>
         </Box>
         </div>
+    if (auth.user) {
+        if (idNamePair.dislikes.includes(auth.user.username)) {
+            DislikeButton = 
+            <div>
+            <Box sx={{p:1, fontSize:15, position:'absolute', left:'81%', bottom:(expanded?'87.3%':'30%')}}>
+                <IconButton sx={{color:'black'}}
+                disabled={guestDisable}
+                onClick={handleDislikeList}>
+                    <ThumbDownIcon sx={{fontSize:40}}/>
+                </IconButton>
+            </Box>
+            </div>
+        }
+    }
 
     let DislikeCounter = 
         <div>
@@ -151,26 +210,115 @@ function ListCard(props) {
        DeleteButton=null
     }
 
+    /*
+    <div id="list-selector-list" style={{maxHeight: '90%', overflow: 'scroll', overflowX:'hidden'}}>
+        {
+            listCard
+        }
+    </div>*/
+
+    //console.log("COMMENTS: ", idNamePair.name, idNamePair.comments)
+    
+    let commentsList = ""
+    if (expanded) {
+        commentsList = 
+            <List>
+            {
+                idNamePair.comments.map((comment, index) => (
+                    <ListItem
+                    key={index}
+                    >
+                        <Box>
+                            {comment}
+                        </Box>
+    
+                    </ListItem>
+                ))
+            }
+            </List>;
+        }
+
     let expandedContents =
-        <Box sx={{border:1, mt:'1.5%', height:'77%', width:'97%', ml:'1.5%'}}>
+        <Box sx={{mt:'1.5%', height:'77%', width:'97%', ml:'1.5%'}}>
             <Grid container sx={{height:'100%'}}
                 direction="row"
                 justifyContent="center"
                 alignItems="center">
-                <Grid item xs={6} sx={{border:1, width:'100%', height:'100%'}}>
-                    <Box
-                        styles={{bgcolor:'#2C2F70'}}
-                    >
+                <Grid item xs={6} sx={{width:'100%', height:'100%'}}>
+                    <Grid container id='expanded-card'>
+                        <Grid item xs={1} sx={{border:1, borderColor:'transparent', mt:'2%'}}>
+                            <Box className='expanded-number'>
+                                1.
+                            </Box>
+                        </Grid>
+                        <Grid item xs={11} sx={{border:1, borderColor:'transparent', mt:'2%'}}>
+                            <Box className='expanded-item'>
+                            {idNamePair.items[0]}
+                            </Box>
+                        </Grid>
+                        
+                        <Grid item xs={1} sx={{border:1, borderColor:'transparent'}}>
+                            <Box className='expanded-number'>
+                                2.
+                            </Box>
+                        </Grid>
+                        <Grid item xs={11} sx={{border:1, borderColor:'transparent'}}>
+                            <Box className='expanded-item'>
+                            {idNamePair.items[1]}
+                            </Box>
+                        </Grid>
 
-                    </Box>
+                        <Grid item xs={1} sx={{border:1, borderColor:'transparent'}}>
+                            <Box className='expanded-number'>
+                                3.
+                            </Box>
+                        </Grid>
+                        <Grid item xs={11} sx={{border:1, borderColor:'transparent'}}> 
+                            <Box className='expanded-item'>
+                            {idNamePair.items[2]}
+                            </Box>
+                        </Grid>
+
+                        <Grid item xs={1} sx={{border:1, borderColor:'transparent'}}>
+                            <Box className='expanded-number'>
+                                4.
+                            </Box>
+                        </Grid>
+                        <Grid item xs={11} sx={{border:1, borderColor:'transparent'}}>
+                            <Box className='expanded-item'>
+                            {idNamePair.items[3]}
+                            </Box>
+                        </Grid>
+
+                        <Grid item xs={1} sx={{border:1, borderColor:'transparent'}}>
+                            <Box className='expanded-number'>
+                                5.
+                            </Box>
+                        </Grid>
+                        <Grid item xs={11} sx={{border:1, borderColor:'transparent'}}>
+                            <Box className='expanded-item'>
+                            {idNamePair.items[4]}
+                            </Box>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                <Grid item xs={6} sx={{border:1,height:'100%'}}>
-                    2.
+                <Grid item container xs={6} sx={{height:'100%'}}>
+                    <div id='expanded-comments'>
 
+                        {commentsList}
 
+                        <TextField
+                            placeholder="Add commment" 
+                            size="small" 
+                            disabled={guestDisable}
+                            sx={{ backgroundColor: "white", borderRadius:1, zIndex:1, width:500 }}
+                            onChange = {handleChangeCommentText}
+                            onKeyPress = {handleAddComment}
+                            value = {commentText}
+                        >
+                        </TextField>
 
-
-
+                    </div>
                 </Grid>
             </Grid>
         </Box>

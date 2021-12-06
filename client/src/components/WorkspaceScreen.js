@@ -56,7 +56,7 @@ export default function WorkspaceScreen() {
         let todayReturn = todaySplit[1]+" "+todaySplit[2]+", "+todaySplit[3] 
 
         let top5list = {
-            name: store.currentList.name,
+            name: name,
             items: [itemOne, itemTwo, itemThree, itemFour, itemFive],
             username: store.currentList.username,
             ownerEmail: store.currentList.ownerEmail,
@@ -69,11 +69,32 @@ export default function WorkspaceScreen() {
         store.updateCurrentList(top5list)
     }
 
+    // this function should check if the user already has a list published with the same name
+    // if there is no duplicate, return true
+    function checkOwnPublishedDuplicates (listName) {
+        let filtered = store.idNamePairs.filter(pair => pair.name === listName && pair.publish !== 'unpublished')
+        if (filtered.length > 0) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    let disablePublish = true
+    let itemsArray = [itemOne, itemTwo, itemThree, itemFour, itemFive]
+    if (itemOne && itemTwo && itemThree && itemFour && itemFive) {
+        if (!(new Set(itemsArray).size !== itemsArray.length)) {
+            if (checkOwnPublishedDuplicates(name)) {
+                disablePublish = false
+            }
+        }
+    }
+
+
     return (
         <div id="top5-workspace-editing">
             <div id="workspace-edit">
             <TextField
-                placeholder="Search" 
                 size="small" 
                 sx={{ backgroundColor: "white", borderRadius:1, zIndex:1, width:500 }}
                 onChange = {handleUpdateName}
@@ -83,12 +104,12 @@ export default function WorkspaceScreen() {
 
 
                 <Grid item xs={1}>
-                    <Box class="item-number">
+                    <Box className="item-number">
                         1.
                     </Box>
                 </Grid>
                 <Grid item xs={11}>
-                    <Box class="top5-item">
+                    <Box className="top5-item">
                         <TextField
                             defaultValue={itemOne}
                             variant='standard'
@@ -102,12 +123,12 @@ export default function WorkspaceScreen() {
 
 
                 <Grid item xs={1}>
-                    <Box class="item-number">
+                    <Box className="item-number">
                         2. 
                     </Box>
                 </Grid>
                 <Grid item xs={11}>
-                    <Box class="top5-item">
+                    <Box className="top5-item">
                         <TextField
                             defaultValue={itemTwo}
                             variant='standard'
@@ -121,12 +142,12 @@ export default function WorkspaceScreen() {
 
 
                 <Grid item xs={1}>
-                    <Box class="item-number">
+                    <Box className="item-number">
                         3. 
                     </Box>
                 </Grid>
                 <Grid item xs={11}>
-                    <Box class="top5-item">
+                    <Box className="top5-item">
                         <TextField
                             defaultValue={itemThree}
                             variant='standard'
@@ -140,12 +161,12 @@ export default function WorkspaceScreen() {
 
 
                 <Grid item xs={1}>
-                    <Box class="item-number">
+                    <Box className="item-number">
                         4. 
                     </Box>
                 </Grid>
                 <Grid item xs={11}>
-                    <Box class="top5-item">
+                    <Box className="top5-item">
                         <TextField
                             defaultValue={itemFour}
                             variant='standard'
@@ -159,12 +180,12 @@ export default function WorkspaceScreen() {
 
 
                 <Grid item xs={1}>
-                    <Box class="item-number">
+                    <Box className="item-number">
                         5. 
                     </Box>
                 </Grid>
                 <Grid item xs={11}>
-                    <Box class="top5-item">
+                    <Box className="top5-item">
                         <TextField
                             defaultValue={itemFive}
                             variant='standard'
@@ -186,6 +207,7 @@ export default function WorkspaceScreen() {
                     Save
                 </Button>
                 <Button
+                    disabled={disablePublish}
                     sx={{top:'88%', left:'79%', border:1, width:'7%', height:'9%', bgcolor:'#DDDDDD', fontSize:20}}
                     onClick={handlePublishList}
                     >

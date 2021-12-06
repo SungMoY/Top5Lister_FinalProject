@@ -100,7 +100,7 @@ function AuthContextProvider(props) {
         })
     }
 
-    auth.enableGuestMode = async function () {
+    auth.enableGuestMode = async function (store) {
         authReducer({
             type: AuthActionType.GUEST_MODE,
             payload: {
@@ -108,6 +108,8 @@ function AuthContextProvider(props) {
             }
         })
         console.log(auth.guestMode)
+        history.push("/app");
+        store.loadIdNamePairsCOMMUNITY()
     }
 
     auth.getLoggedIn = async function () {

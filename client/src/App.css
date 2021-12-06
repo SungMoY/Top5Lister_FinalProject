@@ -222,6 +222,59 @@ body {
   height: 75%;
 }
 
+#expanded-card {
+  position: absolute;
+  width: 47.5%;
+  height: 76%;
+  background-color: #2C2F70;
+  border-radius: 15px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  font-family: "Robaaaoto";
+}
+
+#expanded-comments {
+  position: absolute;
+  right: 2%;
+  width: 47.5%;
+  height: 72%;
+  background-color: transparent;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  font-family: "Robaaaoto";
+  border-style: solid;
+  border-width: 2px;
+  border-color: red;
+  text-align: center;
+}
+
+.expanded-number {
+  position: relative;
+  display: flex;
+  font-size: 30pt;
+  justify-content: left;
+  text-align: center;
+  align-items: center;
+  left:40%;
+  width: 0%;
+  color: #D4AF37;
+  border-radius: 15px;
+  font-family: "Robaaaoto";
+}
+
+.expanded-item {
+  position: relative;
+  display: flex;
+  justify-content: left;
+  left:2%;
+  width: 100%;
+  height:10%;
+  font-size: 30pt;
+  color: #D4AF37;
+  border-radius: 15px;
+  font-family: "Robaaaoto";
+}
+
 /* the dark blue rectangle underneath list name editing*/
 #edit-numbering {
   position: absolute;

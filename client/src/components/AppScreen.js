@@ -46,7 +46,7 @@ export default function AppScreen() {
     let listCard=""
     if (store.idNamePairs) {
         listCard = 
-            <List sx={{right:'1%', ml:2}}>
+            <List sx={{right:'1%', ml:2, mt:'-1%'}}>
             {
                 store.idNamePairs.map((pair) => (
                     <ListCard
@@ -65,7 +65,7 @@ export default function AppScreen() {
             <WorkspaceScreen/>
     } else {
         contentRender = 
-        <div id="list-selector-list" style={{maxHeight: '90%', overflow: 'scroll', overflowX:'hidden'}}>
+        <div id="list-selector-list" style={{maxHeight: '90%', overflow: 'scroll', overflowX:'hidden', top:'9%'}}>
         {
             listCard
         }

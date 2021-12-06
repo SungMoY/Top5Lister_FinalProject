@@ -92,11 +92,15 @@ export default function MenuBar() {
 
     const handleUpdateText = (event) => {
         setText(event.target.value)
+        store.resetSearch()
     }
     const handleKeyPress = (event) => {
         if (event.code === "Enter") {
             store.searchFunction(text)
         }
+    }
+    const handleResetSearch = (event) => {
+        store.resetSearch()
     }
 
     return (
@@ -138,6 +142,7 @@ export default function MenuBar() {
                         }}
                         onChange = {handleUpdateText}
                         onKeyPress = {handleKeyPress}
+                        onFocus = {(event) => handleResetSearch}
                         defaultValue={text}
                         />
                 </Grid>

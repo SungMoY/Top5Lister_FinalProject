@@ -75,7 +75,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     communityListIdNamePairs: store.communityListIdNamePairs,
                     currentPage: payload.page,
-                    currentSearch: store.currentSearch
+                    currentSearch: ""
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -120,14 +120,14 @@ function GlobalStoreContextProvider(props) {
             // HANDLING SEARCHES - need to implement once more data
             case GlobalStoreActionType.SET_CURRENT_SEARCH: {
                 return setStore({
-                    idNamePairs: store.idNamePairs,
+                    idNamePairs: payload.showLists,
                     currentList: store.currentList,
                     newListCounter: store.newListCounter,
                     listBeingEdited: store.listBeingEdited,
                     listMarkedForDeletion: store.listMarkedForDeletion,
                     communityListIdNamePairs: store.communityListIdNamePairs,
                     currentPage: store.currentPage,
-                    currentSearch: payload
+                    currentSearch: payload.searchKey
                 })
             }
             case GlobalStoreActionType.RESET: {
@@ -167,9 +167,29 @@ function GlobalStoreContextProvider(props) {
         //update currentSearch in store
         //parse through idNamePairs
         //update shown idNamePairs to show the ones hit by search
+        let parsedIdNamePairs = []
+        switch (store.currentPage) {
+            case "HOME":
+                parsedIdNamePairs = this.idNamePairs.filter((pair) => (pair.name.toUpperCase().startsWith(searchText.toUpperCase())))
+                break;
+            case "USERS":
+                parsedIdNamePairs = this.idNamePairs.filter((pair) => (pair.username.toUpperCase().startsWith(searchText.toUpperCase())))
+                break;
+            case "GROUP":
+                parsedIdNamePairs = this.idNamePairs.filter((pair) => (pair.name.toUpperCase().startsWith(searchText.toUpperCase())))
+                break;
+            case "COMMUNITY":
+                parsedIdNamePairs = this.idNamePairs.filter((pair) => (pair.name.toUpperCase().startsWith(searchText.toUpperCase())))
+                break;
+            default:
+                break;
+        }
         storeReducer({
             type: GlobalStoreActionType.SET_CURRENT_SEARCH,
-            payload: searchText
+            payload: {
+                searchKey : searchText,
+                showLists : parsedIdNamePairs
+            }
         })
     }
 
@@ -178,7 +198,7 @@ function GlobalStoreContextProvider(props) {
         let newListName = "Untitled" + store.newListCounter;
         let payload = {
             name: newListName,
-            items: ["?", "?", "?", "?", "?"],
+            items: ["", "", "", "", ""],
             ownerEmail: auth.user.email,
             username: auth.user.username,
             comments: [],
@@ -286,7 +306,7 @@ function GlobalStoreContextProvider(props) {
         const response = await api.getTop5ListPairs();
         if (response.data.success) {
             let pairsArray = response.data.idNamePairs;
-
+            console.log("PAIRS ARRAY: ", pairsArray)
             let selectedPairsArray = pairsArray.filter(function (pair) {
                 return (pair.publish !== "unpublished")
             })
@@ -366,7 +386,7 @@ function GlobalStoreContextProvider(props) {
 
             let responsetwo = await api.updateTop5ListById(top5List._id, top5List);
             if (responsetwo.data.success) {
-                console.log("Incremented view count of "+top5List.name)
+                //console.log("Incremented view count of "+top5List.name)
                 switch (store.currentPage) {
                     case "HOME":
                         store.loadIdNamePairsHOME();
@@ -386,7 +406,141 @@ function GlobalStoreContextProvider(props) {
             }
         }
     }
+    store.addComment = async function (id, commentText) {
+        let response = await api.getTop5ListById(id);
+        if (response.data.success) {
+            let top5List = response.data.top5List
+            let author = auth.user.username
+            let entireComment = [author, commentText]
+            top5List.comments.push(entireComment)
+            let responsetwo = await api.updateTop5ListById(top5List._id, top5List);
+            if (responsetwo.data.success) {
+                //console.log("added comment")
+                switch (store.currentPage) {
+                    case "HOME":
+                        store.loadIdNamePairsHOME();
+                        break;
+                    case "USERS":
+                        store.loadIdNamePairsUSERS();
+                        break;
+                    case "GROUP":
+                        store.loadIdNamePairsGROUP();
+                        break;
+                    case "COMMUNITY":
+                        store.loadIdNamePairsCOMMUNITY();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    store.handleLike = async function (id) {
+        let response = await api.getTop5ListById(id);
+        if (response.data.success) {
+            let top5List = response.data.top5List
 
+            console.log("LIKES BEFORE: ", top5List.likes, auth.user.username)
+            console.log("ALREADY LIKED?: ",top5List.likes.includes(auth.user.username))
+
+            if (top5List.likes.includes(auth.user.username)) {
+                //remove like
+                const index = top5List.likes.indexOf(auth.user.username)
+                if (index > -1) { top5List.likes.splice(index, 1) }
+                console.log("REMOVING LIKE")
+            } else {
+                // add like
+                // before i add like, check if this list is disliked. if it is disliked, then remove the dislike and add the like
+                if (top5List.dislikes.includes(auth.user.username)) {
+                    const index = top5List.dislikes.indexOf(auth.user.username)
+                    if (index > -1) { top5List.dislikes.splice(index, 1) }
+                }
+                top5List.likes.push(auth.user.username)
+                console.log("ADDING LIKE")
+            }
+
+            console.log("LIKES AFTER: ", top5List.likes)
+
+            let responsetwo = await api.updateTop5ListById(top5List._id, top5List);
+            if (responsetwo.data.success) {
+                console.log("handled Like")
+                switch (store.currentPage) {
+                    case "HOME":
+                        store.loadIdNamePairsHOME();
+                        break;
+                    case "USERS":
+                        store.loadIdNamePairsUSERS();
+                        break;
+                    case "GROUP":
+                        store.loadIdNamePairsGROUP();
+                        break;
+                    case "COMMUNITY":
+                        store.loadIdNamePairsCOMMUNITY();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    store.handleDislike = async function (id) {
+        let response = await api.getTop5ListById(id);
+        if (response.data.success) {
+            let top5List = response.data.top5List
+
+            if (top5List.dislikes.includes(auth.user.username)) {
+                //remove dislike
+                const index = top5List.dislikes.indexOf(auth.user.username)
+                if (index > -1) { top5List.dislikes.splice(index, 1) }
+            } else {
+                // add dislikes
+                // before i add dislikes, check if this list is liked. if it is liked, then remove the like and add the dislike
+                if (top5List.likes.includes(auth.user.username)) {
+                    const index = top5List.likes.indexOf(auth.user.username)
+                    if (index > -1) { top5List.likes.splice(index, 1) }
+                }
+                top5List.dislikes.push(auth.user.username)
+            }
+            let responsetwo = await api.updateTop5ListById(top5List._id, top5List);
+            if (responsetwo.data.success) {
+                console.log("handled dislike")
+                switch (store.currentPage) {
+                    case "HOME":
+                        store.loadIdNamePairsHOME();
+                        break;
+                    case "USERS":
+                        store.loadIdNamePairsUSERS();
+                        break;
+                    case "GROUP":
+                        store.loadIdNamePairsGROUP();
+                        break;
+                    case "COMMUNITY":
+                        store.loadIdNamePairsCOMMUNITY();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    store.resetSearch = async function (id) {
+        switch (store.currentPage) {
+            case "HOME":
+                store.loadIdNamePairsHOME();
+                break;
+            case "USERS":
+                store.loadIdNamePairsUSERS();
+                break;
+            case "GROUP":
+                store.loadIdNamePairsGROUP();
+                break;
+            case "COMMUNITY":
+                store.loadIdNamePairsCOMMUNITY();
+                break;
+            default:
+                break;
+        }
+    }
     return (
         <GlobalStoreContext.Provider value={{
             store
