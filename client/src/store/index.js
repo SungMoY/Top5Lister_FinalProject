@@ -385,6 +385,8 @@ function GlobalStoreContextProvider(props) {
             top5List.views = ++top5List.views
 
             let responsetwo = await api.updateTop5ListById(top5List._id, top5List);
+
+            /*
             if (responsetwo.data.success) {
                 //console.log("Incremented view count of "+top5List.name)
                 switch (store.currentPage) {
@@ -404,6 +406,7 @@ function GlobalStoreContextProvider(props) {
                         break;
                 }
             }
+            */
         }
     }
     store.addComment = async function (id, commentText) {
@@ -540,6 +543,63 @@ function GlobalStoreContextProvider(props) {
             default:
                 break;
         }
+    }
+    store.sortByDateAscending = async function (id) {
+        let array = this.idNamePairs
+        let sorted = array.sort((item1, item2) => new Date(item1.publish) - new Date(item2.publish))
+        console.log("SORTED PAIRS:", sorted)
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_SEARCH,
+            payload: {
+                searchKey : this.currentSearch,
+                showLists : sorted
+            }
+        })
+    }
+    store.sortByDateDescending = async function (id) {
+        let array = this.idNamePairs
+        let sorted = array.sort((item1, item2) => new Date(item1.publish) - new Date(item2.publish))
+        let reverse = sorted.reverse()
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_SEARCH,
+            payload: {
+                searchKey : this.currentSearch,
+                showLists : reverse
+            }
+        })
+    }
+    store.sortByViews = async function (id) {
+        let array = this.idNamePairs
+        let sorted = array.sort((item1, item2) => item2.views - item1.views)
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_SEARCH,
+            payload: {
+                searchKey : this.currentSearch,
+                showLists : sorted
+            }
+        })
+    }
+    store.sortByLikes = async function (id) {
+        let array = this.idNamePairs
+        let sorted = array.sort((item1, item2) => item2.likes.length - item1.likes.length)
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_SEARCH,
+            payload: {
+                searchKey : this.currentSearch,
+                showLists : sorted
+            }
+        })
+    }
+    store.sortByDislikes = async function (id) {
+        let array = this.idNamePairs
+        let sorted = array.sort((item1, item2) => item2.dislikes.length - item1.dislikes.length)
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_SEARCH,
+            payload: {
+                searchKey : this.currentSearch,
+                showLists : sorted
+            }
+        })
     }
     return (
         <GlobalStoreContext.Provider value={{

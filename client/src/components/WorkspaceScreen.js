@@ -51,9 +51,7 @@ export default function WorkspaceScreen() {
     }
     function handlePublishList(event) {
         let today = new Date();
-        let todayString = today.toDateString()
-        let todaySplit = todayString.split(' ')
-        let todayReturn = todaySplit[1]+" "+todaySplit[2]+", "+todaySplit[3] 
+        let todayString = today.toString()
 
         let top5list = {
             name: name,
@@ -63,7 +61,7 @@ export default function WorkspaceScreen() {
             likes: store.currentList.likes,
             dislikes: store.currentList.dislikes,
             comments: store.currentList.comments,
-            publish: todayReturn,
+            publish: todayString,
             views: store.currentList.views
         }
         store.updateCurrentList(top5list)
@@ -81,7 +79,7 @@ export default function WorkspaceScreen() {
     }
 
     let disablePublish = true
-    let itemsArray = [itemOne, itemTwo, itemThree, itemFour, itemFive]
+    let itemsArray = [itemOne.toUpperCase(), itemTwo.toUpperCase(), itemThree.toUpperCase(), itemFour.toUpperCase(), itemFive.toUpperCase()]
     if (itemOne && itemTwo && itemThree && itemFour && itemFive) {
         if (!(new Set(itemsArray).size !== itemsArray.length)) {
             if (checkOwnPublishedDuplicates(name)) {

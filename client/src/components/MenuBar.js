@@ -71,22 +71,27 @@ export default function MenuBar() {
     }
     const sortByDateAscending = (event) => {
         console.log("Sorting By Date Ascending")
+        store.sortByDateAscending()
         handleMenuClose()
     }
     const sortByDateDescending = (event) => {
         console.log("Sorting By Date Descending")
+        store.sortByDateDescending()
         handleMenuClose()
     }
     const sortByViews = (event) => {
         console.log("Sorting By Views")
+        store.sortByViews()
         handleMenuClose()
     }
     const sortByLikes = (event) => {
         console.log("Sorting By Likes")
+        store.sortByLikes()
         handleMenuClose()
     }
     const sortByDislikes = (event) => {
         console.log("Sorting By Dislikes")
+        store.sortByDislikes()
         handleMenuClose()
     }
 

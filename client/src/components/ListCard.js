@@ -46,8 +46,14 @@ function ListCard(props) {
     }
 
     function handleExpanded(event, id) {
-        if (!expanded && idNamePair.publish !== "unpublished" && idNamePair.username !== auth.user.username) {
-            store.addView(id)
+        if (auth.loggedIn) {
+            if (!expanded && idNamePair.publish !== "unpublished" && idNamePair.username !== auth.user.username) {
+                store.addView(id)
+            }
+        } else {
+            if (!expanded && idNamePair.publish !== "unpublished") {
+                store.addView(id)
+            }
         }
         setExpanded(!expanded)
     }
@@ -81,6 +87,10 @@ function ListCard(props) {
     let viewCount=idNamePair.views
 
 
+    let pubdateString = idNamePair.publish
+    let pubdateSplit = pubdateString.split(' ')
+    let pubdateReturn = pubdateSplit[1]+" "+pubdateSplit[2]+", "+pubdateSplit[3] 
+
     //  publish or not ===> color change and edit/published button change
     let editOrPublished=
         <Button sx={{p:1, fontSize:15, position:'absolute', left:'0%', top:(expanded?'92%':'58%')}}
@@ -93,7 +103,7 @@ function ListCard(props) {
         backcolor = '#D4D4F5'
         editOrPublished =
             <Box sx={{p:1, fontSize:15, position:'absolute', top:(expanded?'93%':'62%')}}>
-                Published: {idNamePair.publish}
+                Published: {pubdateReturn}
             </Box>
     }
 
