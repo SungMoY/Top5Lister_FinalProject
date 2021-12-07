@@ -42,24 +42,24 @@ function ListCard(props) {
     //console.log("IDNAMEPAIR: ", idNamePair)
 
     async function handleDeleteList(event, id) {
-        store.markListForDeletion(id);
+        store.markListForDeletion(idNamePair._id);
     }
 
-    function handleEditScreen(event, id) {
+    function handleEditScreen(event) {
         //console.log("currentList is being set to: ", id)
-        store.setCurrentList(id)
+        store.setCurrentList(idNamePair._id)
     }
 
     function handleExpanded(event, id) {
         if (auth.loggedIn) {
             if (!expanded && idNamePair.publish !== "unpublished" && idNamePair.username !== auth.user.username) {
                 console.log("ADD VIEW REACHED")
-                store.addView(id)
+                store.addView(idNamePair._id)
             }
         } else {
             if (!expanded && idNamePair.publish !== "unpublished") {
                 console.log("ADD VIEW REACHED BY GUEST")
-                store.addView(id)
+                store.addView(idNamePair._id)
             }
         }
         setExpanded(!expanded)
@@ -101,7 +101,7 @@ function ListCard(props) {
     //  publish or not ===> color change and edit/published button change
     let editOrPublished=
         <Button sx={{p:1, fontSize:15, position:'absolute', left:'0%', top:(expanded?'92%':'58%')}}
-            onClick = {(event)=>{handleEditScreen(event, idNamePair._id)}}
+            onClick = {handleEditScreen}
         >
             <Typography sx={{color:'#FF0000'}}>
                 Edit
@@ -205,7 +205,7 @@ function ListCard(props) {
         <div>
         <Box sx={{p:1, fontSize:15, position:'absolute', left:'92%', bottom:(expanded?'87.3%':'35%')}}>
             <IconButton sx={{color:'black'}}
-                onClick={(event)=> {handleDeleteList(event, idNamePair._id)}}
+                onClick={handleDeleteList}
             >
                 <DeleteIcon sx={{fontSize:40}}/>
             </IconButton>
@@ -358,7 +358,7 @@ function ListCard(props) {
 
             <Box sx={{p:1, fontSize:15, position:'absolute', left:'92%', top:'35%'}}>
                 <IconButton sx={{color:'black'}}
-                    onClick={(event)=> {handleExpanded(event, idNamePair._id)}}
+                    onClick={handleExpanded}
                 >
                     <KeyboardDoubleArrowDownIcon sx={{fontSize:40}}/>
                 </IconButton>
@@ -392,7 +392,7 @@ function ListCard(props) {
 
                 <Box sx={{p:1, fontSize:15, position:'absolute', left:'92%', top:'88%'}}>
                     <IconButton sx={{color:'black'}}
-                        onClick={(event)=> {handleExpanded(event, idNamePair._id)}}
+                        onClick={handleExpanded}
                     >
                         <KeyboardDoubleArrowUpIcon sx={{fontSize:40}}/>
                     </IconButton>

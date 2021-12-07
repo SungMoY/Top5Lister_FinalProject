@@ -147,7 +147,7 @@ export default function MenuBar() {
                         }}
                         onChange = {handleUpdateText}
                         onKeyPress = {handleKeyPress}
-                        onFocus = {(event) => handleResetSearch}
+                        onFocus = {handleResetSearch}
                         defaultValue={text}
                         />
                 </Grid>

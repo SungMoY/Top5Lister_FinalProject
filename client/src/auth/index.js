@@ -214,7 +214,6 @@ function AuthContextProvider(props) {
                     }
                 })
                 store.refreshAll()
-                history.push("/");
             }
         } catch (error) {
             console.log("Logout Error: ", error)

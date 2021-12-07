@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react'
-//import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import api from '../api'
 import AuthContext from '../auth'
 /*
@@ -42,7 +42,7 @@ function GlobalStoreContextProvider(props) {
         currentPage: null,
         currentSearch: null
     });
-    //const history = useHistory();
+    const history = useHistory();
 
     // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
     const { auth } = useContext(AuthContext);
@@ -166,7 +166,7 @@ function GlobalStoreContextProvider(props) {
             payload: null
         })
         console.log("AFTER STORE RESET: ", store)
-
+        history.push("/");
     }
 
     // THESE ARE THE FUNCTIONS THAT WILL UPDATE OUR STORE AND
@@ -335,6 +335,7 @@ function GlobalStoreContextProvider(props) {
             //if a name exists in community list but not in host list, then delete the community list for it
             // else, update items
             
+            /*
             const responsetwo = await api.getCommunityListPairs();
             if (responsetwo.data.success) {
                 let communityLists = responsetwo.data.idNamePairs
@@ -393,6 +394,7 @@ function GlobalStoreContextProvider(props) {
                     TV Shows:[]
                 }
                 */
+               /*
                let horizontal = ""
                let copied = ""
                 let bigMap = {}
@@ -421,7 +423,7 @@ function GlobalStoreContextProvider(props) {
                                 //TFT is not in Games
                                 bigMap.idNamePair.name.push([item, 5-idNamePair.items.indexOf(item)])
                             }
-                            */
+                            *//*
 
 
                         })
@@ -437,6 +439,7 @@ function GlobalStoreContextProvider(props) {
                 }
                 //for each key in bigMap, find its related community list and update it
             }
+            */
             storeReducer({
                 type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                 payload: {
