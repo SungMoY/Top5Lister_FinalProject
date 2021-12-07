@@ -323,6 +323,17 @@ function GlobalStoreContextProvider(props) {
             let selectedPairsArray = pairsArray.filter(function (pair) {
                 return (pair.publish !== "unpublished")
             })
+
+            //this is when a user hits the community list tap in menu bar. At this point
+            // all community lists should be update by:
+            //  checking if host lists are deleted, then delete
+            //  checking if a host lists exists without a corresponding community list
+            //  updating the items
+
+            //have an array of names of already existing community lists
+            //if a name exists in hosts lists that is not in community lists, then create a community list for it
+            //if a name exists in community list but not in host list, then delete the community list for it
+            // else, update items
             
             const responsetwo = await api.getCommunityListPairs();
             if (responsetwo.data.success) {
@@ -345,7 +356,7 @@ function GlobalStoreContextProvider(props) {
                     if (!(comNameList.includes(name))) {
                         let payload = {
                             name: name,
-                            items: ["","","","",""],
+                            items: [["",0],["",0],["",0],["",0],["",0]],
                             likes: [],
                             dislikes: [],
                             comments: [],
@@ -358,6 +369,7 @@ function GlobalStoreContextProvider(props) {
                         }
                     }
                 }
+
                 //if a community list exists but its host list is delete/doesnt exist, delete the community list
                 for (let key in comNameList) {
                     let name  = comNameList[key]
@@ -370,24 +382,60 @@ function GlobalStoreContextProvider(props) {
                         }
                     }
                 }
-                // go around and update community lists
+                //create a map of all lists and an array with items and its grade
+                /*
+                {
+                    Games:[
+                        ["Valorant", 15],
+                        ["TFT", 10]
+                        ],
+                    Movies:[],
+                    TV Shows:[]
+                }
+                */
+               let horizontal = ""
+               let copied = ""
+                let bigMap = {}
                 for (let key in selectedPairsArray) {
-                    let listElementName = selectedPairsArray[key].name
-                    let payload = listElementName
-                    const responsefive = await api.getCommunityListByName(payload);
-                    if (responsefive.data.success) {
-                        console.log("SUCCESSFULLY FOUND COMMUNITY LIST FOR: ", responsefive.data.data)
-                        
-                        //let item
+                    let idNamePair = selectedPairsArray[key]    //go through each published top5list
+                    if (idNamePair.name in bigMap) {            // in bigMap, there already exists a scoring for this category, therefore, go through each top5item of current published list
+                        idNamePair.items.forEach((item, itemIndex) => {      //'item' is a single top5Item (Valorant, League, TFT, Pong, FIFA)               and add its score
+                            
+                            horizontal = idNamePair.name
+                            copied = bigMap.horizontal
 
-                    }
+                            copied.forEach(comItem => {     //each two-long array in Games: ["Valorant", 15], ['TFT', 5], ['league', 200]
+                                if (item === comItem[0]) {
+                                    console.log(item," matches ", comItem[0])
+                                    console.log("BIGMAP:", bigMap)
+                                }
+                            })
 
-                    //selectedPairsArray[key]
+                            /*
+                            if (isIn) {
+                                //TFT is already in Games
+                                let currentScore = bigMap.idNamePair.name[item][1]
+                                currentScore+=(5-counter)
 
-                    let updateComList = {
-                        items : responsefive.data.data.items,
+                            } else {
+                                //TFT is not in Games
+                                bigMap.idNamePair.name.push([item, 5-idNamePair.items.indexOf(item)])
+                            }
+                            */
+
+
+                        })
+                    } else {
+                        //create new instance of it bc this category does not currently exist in bigMap
+                        bigMap[idNamePair.name] = [
+                            [idNamePair.items[0], 5-0],
+                            [idNamePair.items[1], 5-1],
+                            [idNamePair.items[2], 5-2],
+                            [idNamePair.items[3], 5-3],
+                            [idNamePair.items[4], 5-4]]
                     }
                 }
+                //for each key in bigMap, find its related community list and update it
             }
             storeReducer({
                 type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
