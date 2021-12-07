@@ -14,9 +14,9 @@ export default function AppScreen() {
     const { store } = useContext(GlobalStoreContext);
 
     const { auth } = useContext(AuthContext);
-    console.log("AppScreen auth.loggedIn: " + auth.loggedIn);
-    console.log("AppScreen auth.guestMode: " + auth.guestMode);
-    console.log("AppScreen idNamePairs: ", store.idNamePairs)
+    //console.log("AppScreen auth.loggedIn: " + auth.loggedIn);
+    //console.log("AppScreen auth.guestMode: " + auth.guestMode);
+    //console.log("AppScreen idNamePairs: ", store.idNamePairs)
 
     const history = useHistory();
     if (!auth.loggedIn && !auth.guestMode) {
@@ -44,20 +44,35 @@ export default function AppScreen() {
     */
 
     let listCard=""
-    if (store.idNamePairs) {
-        listCard = 
-            <List sx={{right:'1%', ml:2, mt:'-1%'}}>
-            {
-                store.idNamePairs.map((pair) => (
-                    <ListCard
-                        key={pair._id}
-                        idNamePair={pair}
-                    />
-                ))
-            }
-            </List>;
+    if (store.currentPage === "COMMUNITY") {
+        if (store.idNamePairs) {
+            listCard = 
+                <List sx={{right:'1%', ml:2, mt:'-1%'}}>
+                {
+                    store.idNamePairs.map((pair) => (
+                        <ListCard
+                            key={pair._id}
+                            idNamePair={pair}
+                        />
+                    ))
+                }
+                </List>;
+        }
+    } else {
+        if (store.idNamePairs) {
+            listCard = 
+                <List sx={{right:'1%', ml:2, mt:'-1%'}}>
+                {
+                    store.idNamePairs.map((pair) => (
+                        <ListCard
+                            key={pair._id}
+                            idNamePair={pair}
+                        />
+                    ))
+                }
+                </List>;
+        }
     }
-
 
     let contentRender = ""
     if (store.currentList) {

@@ -11,7 +11,7 @@ import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
-import { Button} from '@mui/material';
+import { Button, Typography} from '@mui/material';
 import { Grid } from '@mui/material';
 import List from '@mui/material/List';
 import { TextField } from '@mui/material';
@@ -32,6 +32,11 @@ function ListCard(props) {
     let guestDisable = false
     if (auth.guestMode) {
         guestDisable = true
+    }
+
+    let guestAndPub = false
+    if (auth.guestMode || idNamePair.publish === "unpublished") {
+        guestAndPub = true
     }
 
     //console.log("IDNAMEPAIR: ", idNamePair)
@@ -98,21 +103,28 @@ function ListCard(props) {
         <Button sx={{p:1, fontSize:15, position:'absolute', left:'0%', top:(expanded?'92%':'58%')}}
             onClick = {(event)=>{handleEditScreen(event, idNamePair._id)}}
         >
-            Edit
+            <Typography sx={{color:'#FF0000'}}>
+                Edit
+            </Typography>
+
         </Button>
     let backcolor='white'
     if (idNamePair.publish !== "unpublished") {
         backcolor = '#D4D4F5'
         editOrPublished =
             <Box sx={{p:1, fontSize:15, position:'absolute', top:(expanded?'93%':'62%')}}>
+                <Typography sx={{color:'green'}}>
                 Published: {pubdateReturn}
+                </Typography>
             </Box>
     }
 
     let usernameBody =
         <div>
             <Box sx={{p:1, fontSize:15, position:'absolute', top:(expanded?'7.3%':'37%') }}>
+                <Typography>
                 By: {idNamePair.username}
+                </Typography>
             </Box>
         </div>
 
@@ -200,14 +212,6 @@ function ListCard(props) {
         </Box>
         </div>
 
-
-        //viewing own lists SHOULD NOT affect view count
-
-    //home and published - show likes/dislikes and views
-    //home and not published - show no likes/dislikes, show no views
-
-    //not home so list must be published - show likes/dislikes
-
     if (store.currentPage === "HOME") {
         if (idNamePair.publish !== "unpublished") {
             // "Own views do not count" is handled in handleExpanded()
@@ -221,27 +225,20 @@ function ListCard(props) {
     } else {
        DeleteButton=null
     }
-
-    /*
-    <div id="list-selector-list" style={{maxHeight: '90%', overflow: 'scroll', overflowX:'hidden'}}>
-        {
-            listCard
-        }
-    </div>*/
-
-    //console.log("COMMENTS: ", idNamePair.name, idNamePair.comments)
     
     let commentsList = ""
     if (expanded) {
         commentsList = 
-            <List>
+            <List sx={{bottom:'1%'}} style={{maxHeight: '85%', overflow: 'scroll', overflowX:'hidden'}}>
             {
                 idNamePair.comments.map((comment, index) => (
                     <ListItem
                     key={index}
                     >
-                        <Box>
-                            {comment}
+                        <Box sx={{border:1, width:'100%', bgcolor:'#D4AF37', borderRadius:'5px'}}>
+                            <Typography sx={{ml:'2%'}}>
+                                {comment[0]+": "+comment[1]}
+                            </Typography>
                         </Box>
     
                     </ListItem>
@@ -322,7 +319,7 @@ function ListCard(props) {
                         <TextField
                             placeholder="Add commment" 
                             size="small" 
-                            disabled={guestDisable}
+                            disabled={guestAndPub}
                             sx={{ backgroundColor: "white", borderRadius:1, zIndex:1, width:500 }}
                             onChange = {handleChangeCommentText}
                             onKeyPress = {handleAddComment}
@@ -343,7 +340,9 @@ function ListCard(props) {
             divider
         >
             <Box sx={{p:1, fontSize:25, fontWeight: 'bold', position:'absolute', top:'0%'}}>
+                <Typography sx={{fontSize:'100%'}}>
                 {idNamePair.name}
+                </Typography>
             </Box>
 
             {usernameBody}
@@ -375,7 +374,9 @@ function ListCard(props) {
                 divider
             >
                 <Box sx={{p:1, fontSize:25, fontWeight: 'bold', position:'absolute', top:'0%'}}>
+                    <Typography sx={{fontSize:'100%'}}>
                     {idNamePair.name}
+                    </Typography>
                 </Box>
 
                 {usernameBody}

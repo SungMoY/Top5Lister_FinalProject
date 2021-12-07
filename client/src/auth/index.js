@@ -107,7 +107,7 @@ function AuthContextProvider(props) {
                 guestMode: true
             }
         })
-        console.log(auth.guestMode)
+        //console.log(auth.guestMode)
         history.push("/app");
         store.loadIdNamePairsCOMMUNITY()
     }

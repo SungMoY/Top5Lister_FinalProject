@@ -1,4 +1,3 @@
-import { Global } from '@emotion/react';
 import { createContext, useContext, useState } from 'react'
 //import { useHistory } from 'react-router-dom'
 import api from '../api'
@@ -24,7 +23,7 @@ export const GlobalStoreActionType = {
     SET_CURRENT_SEARCH: "SET_CURRENT_SEARCH",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     RESET: "RESET",
-    UPDATE_SINGLE_LIST_VIEW: "UPDATE_SINGLE_LIST_VIEW"
+    UPDATE_SINGLE_LIST_VIEW: "UPDATE_SINGLE_LIST_VIEW",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -319,11 +318,77 @@ function GlobalStoreContextProvider(props) {
         const response = await api.getTop5ListPairs();
         if (response.data.success) {
             let pairsArray = response.data.idNamePairs;
+
             console.log("PAIRS ARRAY: ", pairsArray)
             let selectedPairsArray = pairsArray.filter(function (pair) {
                 return (pair.publish !== "unpublished")
             })
+            
+            const responsetwo = await api.getCommunityListPairs();
+            if (responsetwo.data.success) {
+                let communityLists = responsetwo.data.idNamePairs
+                console.log("RESPONSE:", responsetwo.data)
 
+                let comNameList = []
+                let pubNameList = []
+                for (let key in communityLists) {
+                    let list = communityLists[key]
+                    comNameList.push(list.name)
+                }
+                for (let key in selectedPairsArray) {
+                    let list = selectedPairsArray[key]
+                    pubNameList.push(list.name)
+                }
+                // if a list doesn't have a community list, make it
+                for (let key in pubNameList) {
+                    let name = pubNameList[key]
+                    if (!(comNameList.includes(name))) {
+                        let payload = {
+                            name: name,
+                            items: ["","","","",""],
+                            likes: [],
+                            dislikes: [],
+                            comments: [],
+                            updateDate: "never",
+                            views: 0
+                        }
+                        const responsethree = await api.createCommunityList(payload);
+                        if (responsethree.data.success) {
+                            console.log("ADDED NEW COMMUNITY LIST")
+                        }
+                    }
+                }
+                //if a community list exists but its host list is delete/doesnt exist, delete the community list
+                for (let key in comNameList) {
+                    let name  = comNameList[key]
+                    if (!(pubNameList.includes(name))) {
+                        console.log("INVALID LIST NAME: ", name)
+                        let payload = name
+                        const responsefour = await api.deleteCommunityListByName(payload);
+                        if (responsefour.data.success) {
+                            console.log("SUCCESSFULLY DELETED INVALID COMMUNITY LIST")
+                        }
+                    }
+                }
+                // go around and update community lists
+                for (let key in selectedPairsArray) {
+                    let listElementName = selectedPairsArray[key].name
+                    let payload = listElementName
+                    const responsefive = await api.getCommunityListByName(payload);
+                    if (responsefive.data.success) {
+                        console.log("SUCCESSFULLY FOUND COMMUNITY LIST FOR: ", responsefive.data.data)
+                        
+                        //let item
+
+                    }
+
+                    //selectedPairsArray[key]
+
+                    let updateComList = {
+                        items : responsefive.data.data.items,
+                    }
+                }
+            }
             storeReducer({
                 type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                 payload: {
@@ -399,25 +464,6 @@ function GlobalStoreContextProvider(props) {
 
             let responsetwo = await api.updateTop5ListById(top5List._id, top5List);
             if (responsetwo.data.success) {
-                //console.log("Incremented view count of "+top5List.name)
-                /*
-                switch (store.currentPage) {
-                    case "HOME":
-                        store.loadIdNamePairsHOME();
-                        break;
-                    case "USERS":
-                        store.loadIdNamePairsUSERS();
-                        break;
-                    case "GROUP":
-                        store.loadIdNamePairsGROUP();
-                        break;
-                    case "COMMUNITY":
-                        store.loadIdNamePairsCOMMUNITY();
-                        break;
-                    default:
-                        break;
-                }*/
-
                 let currentShown = this.idNamePairs
                 let foundListIndex = currentShown.findIndex(element => element._id === id)
 
@@ -439,23 +485,15 @@ function GlobalStoreContextProvider(props) {
             top5List.comments.push(entireComment)
             let responsetwo = await api.updateTop5ListById(top5List._id, top5List);
             if (responsetwo.data.success) {
-                //console.log("added comment")
-                switch (store.currentPage) {
-                    case "HOME":
-                        store.loadIdNamePairsHOME();
-                        break;
-                    case "USERS":
-                        store.loadIdNamePairsUSERS();
-                        break;
-                    case "GROUP":
-                        store.loadIdNamePairsGROUP();
-                        break;
-                    case "COMMUNITY":
-                        store.loadIdNamePairsCOMMUNITY();
-                        break;
-                    default:
-                        break;
-                }
+                let currentShown = this.idNamePairs
+                let foundListIndex = currentShown.findIndex(element => element._id === id)
+
+                currentShown[foundListIndex] = top5List
+
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_SINGLE_LIST_VIEW,
+                    payload: currentShown
+                })
             }
         }
     }
@@ -488,22 +526,16 @@ function GlobalStoreContextProvider(props) {
             let responsetwo = await api.updateTop5ListById(top5List._id, top5List);
             if (responsetwo.data.success) {
                 console.log("handled Like")
-                switch (store.currentPage) {
-                    case "HOME":
-                        store.loadIdNamePairsHOME();
-                        break;
-                    case "USERS":
-                        store.loadIdNamePairsUSERS();
-                        break;
-                    case "GROUP":
-                        store.loadIdNamePairsGROUP();
-                        break;
-                    case "COMMUNITY":
-                        store.loadIdNamePairsCOMMUNITY();
-                        break;
-                    default:
-                        break;
-                }
+
+                let currentShown = this.idNamePairs
+                let foundListIndex = currentShown.findIndex(element => element._id === id)
+
+                currentShown[foundListIndex] = top5List
+
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_SINGLE_LIST_VIEW,
+                    payload: currentShown
+                })
             }
         }
     }
@@ -528,22 +560,15 @@ function GlobalStoreContextProvider(props) {
             let responsetwo = await api.updateTop5ListById(top5List._id, top5List);
             if (responsetwo.data.success) {
                 console.log("handled dislike")
-                switch (store.currentPage) {
-                    case "HOME":
-                        store.loadIdNamePairsHOME();
-                        break;
-                    case "USERS":
-                        store.loadIdNamePairsUSERS();
-                        break;
-                    case "GROUP":
-                        store.loadIdNamePairsGROUP();
-                        break;
-                    case "COMMUNITY":
-                        store.loadIdNamePairsCOMMUNITY();
-                        break;
-                    default:
-                        break;
-                }
+                let currentShown = this.idNamePairs
+                let foundListIndex = currentShown.findIndex(element => element._id === id)
+
+                currentShown[foundListIndex] = top5List
+
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_SINGLE_LIST_VIEW,
+                    payload: currentShown
+                })
             }
         }
     }
